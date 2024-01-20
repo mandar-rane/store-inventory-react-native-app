@@ -1,0 +1,1 @@
+export const SET_SHOP_DETAILS = "set_shop_details";

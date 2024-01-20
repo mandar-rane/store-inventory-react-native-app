@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "name": "dezdash",
+    "slug": "dezdash",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "6f268243-a058-4912-8e02-08afde534b9a"
+      }
+    },
+    "owner": "misccdr"
+  }
+}
