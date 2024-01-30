@@ -13,15 +13,19 @@ const CustomModal = ({ visible, type, onClose, msg }) => {
         );
       case 'success':
         return (
-          <View style={styles.modalContent}>
-            <Text>Product updated successfully</Text>
+          <View style={{backgroundColor: '#e2fee2',
+          padding: 20,
+          borderRadius: 10,}}>
+            <Text style={{color:"#003900"}}>{msg}</Text>
           </View>
         );
       case 'error':
         return (
-          <View style={styles.modalContent}>
-            <Text>Failed to update product</Text>
-          </View>
+            <View style={{backgroundColor: '#fee2e2',
+            padding: 20,
+            borderRadius: 10,}}>
+              <Text style={{color:"#300000"}}>{msg}</Text>
+            </View>
         );
       default:
         return null;

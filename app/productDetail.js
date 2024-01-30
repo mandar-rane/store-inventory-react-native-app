@@ -8,9 +8,7 @@ import {
   Button,
   StyleSheet,
   ScrollView,
-  ActivityIndicator,
   TouchableOpacity,
-  Modal,
   Pressable,
   ToastAndroid,
 } from "react-native";
@@ -54,6 +52,7 @@ const productDetail = () => {
   }, [editedProduct, newImageUrl]);
 
   const fetchProductDetails = async () => {
+    setIsLoading(true);
     setIsImageUploaded(false);
     try {
       const response = await axios.get(
@@ -66,13 +65,22 @@ const productDetail = () => {
         }
       );
       if (response.data.success) {
+        setIsLoading(false);
         setEditedProduct(response.data.product);
         console.log(response.data.product);
       } else {
+        setIsLoading(false);
         console.error("Failed to fetch product details");
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Error fetching product details:", error);
+    }finally{
+      
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
     }
   };
 
@@ -334,13 +342,9 @@ const productDetail = () => {
         <View style={styles.overlay} />
       ) : null}
 
-      {/* Loading Modal */}
+    
       <CustomModal visible={isLoading} type="loading" msg=""/>
-
-      {/* Success Modal */}
       <CustomModal visible={isSuccess} type="success" msg="Product updated successfully"/>
-
-      {/* Error Modal */}
       <CustomModal visible={isError} type="error" msg="Failed to update product"/>
     </ScrollView>
   );

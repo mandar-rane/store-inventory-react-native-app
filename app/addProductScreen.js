@@ -13,6 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import ImgUpload from "../components/ImgUpload";
 import RemoveImg from "../components/RemoveImg";
 import axios from "axios";
+import CustomModal from "../components/CustomModal";
 
 const addProductScreen = () => {
   const [productData, setProductData] = useState({
@@ -26,6 +27,7 @@ const addProductScreen = () => {
   });
 
   const handleCreateProduct = async () => {
+    setIsLoading(true);
     try {
       const postFormData = new FormData();
       postFormData.append("name", productData.name);
@@ -53,14 +55,28 @@ const addProductScreen = () => {
           },
         }
       );
+      setIsSuccess(true);
       console.log("Product created successfully!", response);
+
     } catch (error) {
+      setIsError(true);
       console.error("Error creating product:", error);
+    }finally{
+      setIsLoading(false);
+
+      setTimeout(() => {
+        setIsSuccess(false);
+        setIsError(false);
+      }, 2000);
     }
   };
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
+
 
   useEffect(() => {
     const isValid =
@@ -103,7 +119,7 @@ const addProductScreen = () => {
   };
 
   return (
-    <View style={{ flexDirection: "column", padding: 15 }}>
+    <View style={{ flexDirection: "column", padding: 15, flex:1 }}>
       <View style={{ marginBottom: 20, flexDirection: "row" }}>
         <Image
           style={{ marginEnd: 10 }}
@@ -134,19 +150,7 @@ const addProductScreen = () => {
         />
       )}
 
-      <View style={{ flex: 1, alignItems: "flex-start" }}>
-        <Text
-          style={{
-            color: "black",
-            fontWeight: "bold",
-            fontSize: 24,
-            marginBottom: 20,
-            textAlign: "center",
-          }}
-        >
-          Add Product
-        </Text>
-      </View>
+      
       <TextInput
         maxLength={35}
         keyboardType="default"
@@ -182,7 +186,7 @@ const addProductScreen = () => {
       />
       <View style={{ flexDirection: "row" , marginBottom:30}}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.label}>Image</Text>
+          
           {isImageUploaded ? (
             <Pressable onPress={removeSelectedImg}>
               <RemoveImg />
@@ -195,7 +199,7 @@ const addProductScreen = () => {
         </View>
 
         <View >
-          <Text style={styles.label}>Stock</Text>
+      
           <View style={styles.stockcontainer}>
             <TouchableOpacity
               onPress={() =>
@@ -262,6 +266,14 @@ const addProductScreen = () => {
         onPress={handleCreateProduct}
         disabled={!isFormValid}
       />
+
+{isLoading || isSuccess || isError ? (
+        <View style={styles.overlay} />
+      ) : null}
+
+      <CustomModal visible={isLoading} type="loading" msg=""/>
+      <CustomModal visible={isSuccess} type="success" msg="Product created successfully"/>
+      <CustomModal visible={isError} type="error" msg="Failed to create product"/>
     </View>
   );
 };
@@ -271,7 +283,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderRadius: 10,
     height: 40,
-    borderColor: "gray",
+    borderColor: "#bdbdbd",
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,
@@ -283,7 +295,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderRadius: 10,
     height: 80,
-    borderColor: "gray",
+    borderColor: "#bdbdbd",
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,
@@ -301,7 +313,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: "#007BFF",
+    borderColor: "#bdbdbd",
     backgroundColor: "#FFF",
     padding: 10,
     marginHorizontal: 5,
@@ -309,7 +321,7 @@ const styles = StyleSheet.create({
   },
   selectedButton: {
     backgroundColor: "#007BFF",
-    borderColor: "#007BFF",
+    borderColor: "#bdbdbd",
   },
   buttonText: {
     color: "#007BFF",
@@ -341,6 +353,10 @@ const styles = StyleSheet.create({
   },
   stockdisabledButton: {
     backgroundColor: "#bdc3c7", // Grey out color
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
 
