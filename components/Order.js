@@ -35,7 +35,7 @@ const Order = ({
 
             flexDirection: "row",
             borderTopWidth: 1,
-            borderTopColor: "#7e7e7e",
+            borderTopColor: "#bdbdbd",
           }}
         >
           <View style={{ width: "45%" }}>

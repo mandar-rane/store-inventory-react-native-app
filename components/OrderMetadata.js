@@ -25,7 +25,7 @@ const OrderMetadata = ({
 
       <View
         style={{
-          borderBottomColor: "#636E72",
+          borderBottomColor: "#bdbdbd",
           borderBottomWidth: 1,
           marginBottom: 4,
         }}
@@ -74,7 +74,7 @@ const OrderMetadata = ({
       </View>
       <View
         style={{
-          borderBottomColor: "#636E72",
+          borderBottomColor: "#bdbdbd",
           borderBottomWidth: 1,
           marginBottom: 4,
         }}

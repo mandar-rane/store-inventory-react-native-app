@@ -171,7 +171,7 @@ const OrdersScreen = () => {
             flexDirection: "column",
             flex: 1,
             alignItems: "center",
-            borderColor: "black",
+            borderColor: "#bdbdbd",
             borderWidth: 1,
             borderRadius: 25,
           
@@ -199,7 +199,7 @@ const OrdersScreen = () => {
             alignItems: "center",
             backgroundColor:"#ffffff",
             borderRadius: 25,
-            borderColor: "black",
+            borderColor: "#bdbdbd",
             borderWidth: 1,
           }}
         >
@@ -254,7 +254,7 @@ const OrdersScreen = () => {
           marginTop: 5,
 
           borderRadius: 25,
-          borderColor: "black",
+          borderColor: "#bdbdbd",
           borderWidth: 1,
         }}
       >

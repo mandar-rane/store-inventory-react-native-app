@@ -70,7 +70,7 @@ const productScreen = () => {
       }
     >
       <Product
-        url={item.images[0].url}
+        url={item.image.url}
         productName={item.name}
         productPrice={item.price}
         vegnonveg={item.vegnonveg}

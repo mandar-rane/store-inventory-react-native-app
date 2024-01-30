@@ -22,6 +22,7 @@ const orderDetails = () => {
           },
         }
       );
+      console.log(response.data.order);
       setOrderDetails(response.data.order);
     } catch (error) {
       console.error("Error fetching order details:", error);
@@ -39,7 +40,7 @@ const orderDetails = () => {
   }
 
   return (
-    <View style={{ padding: 10, backgroundColor: "#f6f8fc",flex:1}}>
+    <ScrollView style={{ padding: 10, backgroundColor: "#f6f8fc"}}>
       <View>
         <View
           style={{
@@ -80,6 +81,7 @@ const orderDetails = () => {
             </View>
           </View>
         </View>
+        
         <View
           style={{
             marginTop: 30,
@@ -98,7 +100,7 @@ const orderDetails = () => {
               style={{
                 flex: 1,
                 height: 1,
-                backgroundColor: "#636E72",
+                backgroundColor: "#bdbdbd",
                 marginHorizontal: 12,
               }}
             />
@@ -116,7 +118,7 @@ const orderDetails = () => {
               style={{
                 flex: 1,
                 height: 1,
-                backgroundColor: "#636E72",
+                backgroundColor: "#bdbdbd",
                 marginHorizontal: 12,
               }}
             />
@@ -129,7 +131,7 @@ const orderDetails = () => {
           alignItems: "center",
           marginBottom: 20,
           borderRadius: 10,
-          borderColor: "black",
+          borderColor: "#bdbdbd",
           borderWidth: 1
           
         }}
@@ -152,7 +154,7 @@ const orderDetails = () => {
           width: "100%",
           padding: 10,
           borderRadius: 10,
-          borderColor: "black",
+          borderColor: "#bdbdbd",
           borderWidth: 1,
           shadowColor: "#000",
 
@@ -163,6 +165,8 @@ const orderDetails = () => {
           <Text style={{ marginEnd: 5 }}>Order#</Text>
           <Text>{orderDetails._id}</Text>
         </View>
+
+        
 
         <View style={{ padding: 5 }}>
           <FlatList
@@ -186,43 +190,11 @@ const orderDetails = () => {
           />
         </View>
       </View>
+      <View style={{height:40}}/>
 
-      {/* <View>
-      <Text>Order ID: {orderDetails._id}</Text>
-      <Text>User: {orderDetails.user.username} ({orderDetails.user.phone})</Text>
       
-      <FlatList
-        data={orderDetails.orderItems}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.name}</Text>
-            <Image source={{ uri: item.image }} style={{ width: 100, height: 100 }} />
-            <Text>Selected Customization: {item.selectedCustomisations[0].options[0].optionName}</Text>
-          </View>
-        )}
-      />
-
-      <Text>Order Addons:</Text>
-      <FlatList
-        data={orderDetails.orderAddOns}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.addOn.name}</Text>
-            <Text>Quantity: {item.quantity}</Text>
-            <Text>Total Price: {item.totalPrice}</Text>
-          </View>
-        )}
-      />
-
-      <Text>Order Status: {orderDetails.orderStatus}</Text>
-    </View> */}
-    <View style={{position:"absolute", bottom:0, left:0, margin:18, flexDirection:"column", gap:-10, width:"100%", alignItems:"center"}}>
-      <Text style={{fontSize: 36, fontWeight:"bold", fontStyle:"italic", color:"#808080"}}>DezDash</Text>
-      <Text style={{fontSize: 20, fontWeight:"bold", fontStyle:"italic", color:"#808080"}}>by dezerto</Text>
-      </View>
-    </View>
+    
+    </ScrollView>
   );
 };
 

@@ -24,14 +24,24 @@ const otpScreen = () => {
   const [receivedOtp, setOtp] = useState("");
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [timer, setTimer] = useState(60);
+  const [isOtpValid, setOtpValid] = useState(false);
+
+  useEffect(() =>{
+    const otpRegex = /^\d{6}$/;
+    if(otpRegex.test(receivedOtp)){
+      setOtpValid(true);
+    }else{
+      setOtpValid(false);
+    }
+
+  }, [receivedOtp])
 
   const handleOtpSubmit = async () => {
-    const otpRegex = /^\d{6}$/;
-
-    if (otpRegex.test(receivedOtp)) {
+    
+    if (isOtpValid) {
       try {
         const otpApiUrl =
-          "https://dzo.onrender.com/api/vi/shop/owner/login/verify/otp";
+          "https://dzo.onrender.com/api/vi/shop/owner/login/verify/ot";
         const postData = { phone: phoneNum, otp: receivedOtp };
         const otpResponse = await axios.post(otpApiUrl, postData);
 
@@ -54,7 +64,7 @@ const otpScreen = () => {
   const handleResendOtp = async () => {
     try {
       const otpApiUrl =
-        "https://dzo.onrender.com/api/vi/shop/owner/login/send/otp";
+        "https://dzo.onrender.com/api/vi/shop/owner/login/send/ot";
       const postData = { phone: phoneNum };
       const otpResponse = await axios.post(otpApiUrl, postData);
       setButtonDisabled(true);
@@ -75,7 +85,7 @@ const otpScreen = () => {
     const makeApiCall = async () => {
       try {
         const otpApiUrl =
-          "https://dzo.onrender.com/api/vi/shop/owner/login/send/otp";
+          "https://dzo.onrender.com/api/vi/shop/owner/login/send/ot";
         const postData = { phone: phoneNum };
         const otpResponse = await axios.post(otpApiUrl, postData);
 
@@ -172,10 +182,13 @@ const otpScreen = () => {
           <View
             style={{
               flex: 4,
+              height:46,
+              paddingLeft:10,
+              justifyContent:"center",
               borderRadius: 8,
               borderColor: "gray",
               borderWidth: 1,
-              paddingHorizontal: 4,
+              
             }}
           >
             <TextInput
@@ -184,13 +197,8 @@ const otpScreen = () => {
               value={receivedOtp}
               onChangeText={(text) => setOtp(text)}
               style={{
-                height: 40,
+                fontSize: 16,
                 fontWeight: "bold",
-                fontStyle: "italic",
-                fontSize: 20,
-                // borderColor: 'gray',
-                // borderWidth: 1,
-                paddingHorizontal: 6,
               }}
               inputMode="numeric"
             />
@@ -198,10 +206,12 @@ const otpScreen = () => {
         </View>
 
         <Pressable
+        android_ripple={{ color: "#ffffff" }}
+        disabled={isOtpValid?false:true}
           style={{
-            backgroundColor: "black",
+            backgroundColor: isOtpValid?"black":"#999999",
             borderRadius: 10,
-            height: 50,
+            height:46,
             justifyContent: "center",
             alignItems: "center",
             marginBottom: 6,
@@ -218,12 +228,13 @@ const otpScreen = () => {
           </Text>
         </Pressable>
         <Pressable
+        android_ripple={{ color: "#999999" }}
           style={{
             backgroundColor: isButtonDisabled ? "#e0e0e0" : "white",
             borderRadius: 10,
             borderColor: "black",
             borderWidth: 1,
-            height: 50,
+            height: 46,
             justifyContent: "center",
             alignItems: "center",
           }}

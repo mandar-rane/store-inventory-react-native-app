@@ -11,6 +11,7 @@ import {
   Alert,
   // ToastAndroid,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { Stack, useRouter, Link } from "expo-router";
@@ -30,10 +31,19 @@ const Home = () => {
   },[])
 
   const [phoneNum, setPhoneNum] = useState("");
+  const [isPhoneNumValid, setPhoneNumValid] = useState(false);
 
-  const handleLogin = () => {
+  useEffect(() => {
     const phoneNumRegex = /^\d{10}$/;
     if (phoneNumRegex.test(phoneNum)) {
+      setPhoneNumValid(true);
+    } else {
+      setPhoneNumValid(false);
+    }
+  }, [phoneNum]);
+
+  const handleLogin = () => {
+    if (isPhoneNumValid) {
       router.push({ pathname: "/otpScreen", params: { phoneNum: phoneNum } });
     } else {
       if (Platform.OS == "android") {
@@ -92,20 +102,20 @@ const Home = () => {
           style={{
             flex: 1,
             height: 1,
-            backgroundColor: "#abb7b7",
+            backgroundColor: "#bdbdbd",
             marginHorizontal: 5,
           }}
         />
         <View>
           <Text style={{ width: 120, textAlign: "center" }}>
-            log in or sign up
+            Log in or sign up
           </Text>
         </View>
         <View
           style={{
             flex: 1,
             height: 1,
-            backgroundColor: "#abb7b7",
+            backgroundColor: "#bdbdbd",
             marginHorizontal: 5,
           }}
         />
@@ -130,17 +140,21 @@ const Home = () => {
               alignItems: "center",
               flex: 1,
               borderRadius: 8,
-              borderColor: "gray",
+              borderColor: "#bdbdbd",
               borderWidth: 1,
               marginEnd: 5,
+              width: 46,
+              height: 46,
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <Image
               source={require("dezdash/assets/images/india_flag_icon.png")} // Replace with the path to your flag image
               resizeMode="cover"
               style={{
-                width: 40,
-                height: 40,
+                width: 30,
+                height: 30,
                 // borderColor: 'gray',
                 // borderWidth: 1,
                 // padding:10,
@@ -151,25 +165,27 @@ const Home = () => {
           <View
             style={{
               flex: 4,
+              flexDirection: "row",
+              alignItems: "center",
               borderRadius: 8,
-              borderColor: "gray",
+              borderColor: "#bdbdbd",
+              height: 46,
               borderWidth: 1,
-              paddingHorizontal: 4,
+             
+              paddingStart:12
             }}
           >
+            <Text style={{ fontSize: 15, fontWeight: "bold", marginEnd:6 }}>+91</Text>
+
             <TextInput
-              placeholder="Enter Phone number"
+              placeholder="Enter Phone Number"
               value={phoneNum}
               maxLength={10}
               multiLine="false"
               onChangeText={(text) => setPhoneNum(text)}
               style={{
-                height: 40,
+                fontSize: 15,
                 fontWeight: "bold",
-                fontStyle: "italic",
-                fontSize: 20,
-
-                paddingStart: 6,
               }}
               inputMode="numeric"
             />
@@ -177,10 +193,12 @@ const Home = () => {
         </View>
 
         <Pressable
+          android_ripple={{ color: "#999999" }}
+          disabled={isPhoneNumValid ? false : true}
           style={{
-            backgroundColor: "black",
+            backgroundColor: isPhoneNumValid ? "black" : "#999999",
             borderRadius: 10,
-            height: 50,
+            height: 44,
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -192,7 +210,7 @@ const Home = () => {
               fontSize: 18,
             }}
           >
-            Login
+            Continue
           </Text>
         </Pressable>
       </View>

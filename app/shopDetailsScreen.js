@@ -120,8 +120,9 @@ const ShopDetailsScreen = () => {
           
         </TouchableOpacity>
 
-        <View style={{ flexDirection: "row" }}>
+        <View style={{flexDirection: "row", width:"100%", justifyContent:"space-evenly", gap:10, marginBottom:10 }}>
           <ShopAttribute
+  
             attribute="Address"
             attributeValue={shopData.address}
           />
@@ -132,7 +133,7 @@ const ShopDetailsScreen = () => {
           />
         </View>
 
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", width:"100%", justifyContent:"space-evenly", gap:10  }}>
           <ShopAttribute
             attribute="Rating"
             attributeValue={shopData.averageRating}

@@ -14,9 +14,12 @@
         "origin": false
       },
       "eas": {
-        "projectId": "6f268243-a058-4912-8e02-08afde534b9a"
+        "projectId": "f2108682-3354-4216-a785-2db6abb04275"
       }
     },
-    "owner": "misccdr"
+    "owner": "misccdr",
+    "android": {
+      "package": "com.misccdr.dezdash"
+    }
   }
 }

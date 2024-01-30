@@ -43,7 +43,7 @@ const ShopAttribute = ({ attribute, attributeValue }) => {
         alignItems: "start",
         justifyContent: "center",
         borderRadius: 15,
-        margin: 10,
+       
         backgroundColor:"#ffffff",
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
