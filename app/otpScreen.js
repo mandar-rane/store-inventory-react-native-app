@@ -41,7 +41,7 @@ const otpScreen = () => {
     if (isOtpValid) {
       try {
         const otpApiUrl =
-          "https://dzo.onrender.com/api/vi/shop/owner/login/verify/ot";
+          "https://dzo.onrender.com/api/vi/shop/owner/login/verify/otp";
         const postData = { phone: phoneNum, otp: receivedOtp };
         const otpResponse = await axios.post(otpApiUrl, postData);
 
@@ -64,7 +64,7 @@ const otpScreen = () => {
   const handleResendOtp = async () => {
     try {
       const otpApiUrl =
-        "https://dzo.onrender.com/api/vi/shop/owner/login/send/ot";
+        "https://dzo.onrender.com/api/vi/shop/owner/login/send/otp";
       const postData = { phone: phoneNum };
       const otpResponse = await axios.post(otpApiUrl, postData);
       setButtonDisabled(true);
@@ -85,7 +85,7 @@ const otpScreen = () => {
     const makeApiCall = async () => {
       try {
         const otpApiUrl =
-          "https://dzo.onrender.com/api/vi/shop/owner/login/send/ot";
+          "https://dzo.onrender.com/api/vi/shop/owner/login/send/otp";
         const postData = { phone: phoneNum };
         const otpResponse = await axios.post(otpApiUrl, postData);
 

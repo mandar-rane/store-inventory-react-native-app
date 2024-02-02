@@ -22,7 +22,7 @@ const Home = () => {
   async function redirectUsingToken(key) {
     let result = await SecureStore.getItemAsync(key);
     if (result) {
-      router.push({ pathname: "/ordersScreen" });
+      router.replace({ pathname: "/ordersScreen" });
     }
   }
 
@@ -44,10 +44,10 @@ const Home = () => {
 
   const handleLogin = () => {
     if (isPhoneNumValid) {
-      router.push({ pathname: "/otpScreen", params: { phoneNum: phoneNum } });
+      router.replace({ pathname: "/ordersScreen", params: { phoneNum: phoneNum } });
     } else {
       if (Platform.OS == "android") {
-        // ToastAndroid.show("Enter Correct Number", ToastAndroid.SHORT);
+        ToastAndroid.show("Enter Correct Number", ToastAndroid.SHORT);
       } else {
         Alert.alert("Error", "Enter Correct Number");
       }

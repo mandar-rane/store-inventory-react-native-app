@@ -8,14 +8,12 @@ const OrderProduct = ({ url, name, qty, price, customizations }) => {
         <View>
           <View
             style={{
-              backgroundColor: "#ffffff",
-              padding: 10,
-              borderColor: "#bdbdbd",
-              borderWidth: 1,
-              borderRadius: 15,
+              
+            
+              
             }}
           >
-            <Image source={{ uri: url }} style={{ width: 60, height: 60 }} />
+            <Image source={{ uri: url }} style={{ width: 60, height: 60, borderRadius: 10, borderColor:'black', borderWidth:0 }} />
           </View>
         </View>
         <View

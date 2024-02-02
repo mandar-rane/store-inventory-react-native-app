@@ -1,18 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import ShopAttribute from "../components/ShopAttribute";
 import { Stack, useRouter, Link } from "expo-router";
-
+import MapViewComp from "../components/MapViewComp";
 
 const ShopDetailsScreen = () => {
   const [shopData, setShopData] = useState(null);
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleToProductScreenNav = () =>{
+  const handleToProductScreenNav = () => {
     router.push({ pathname: "/productScreen" });
-  }
+  };
+
+  const handleUserDetailPress = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   // const shopFromStore = useSelector((state) => state.shopReducer);
 
@@ -44,16 +56,15 @@ const ShopDetailsScreen = () => {
   }
 
   return (
-    <View style={{ flexDirection: "column", padding: 16, flex:1 }}>
-      
-      <View style={{marginBottom:20, flexDirection:"row"}}>
-        <Image style={{marginEnd:10}} source={require("../assets/images/back_icon.png")}/>
-        <Text style={{fontSize: 24, fontWeight:"bold"}}>Your Shop</Text>
-        
+    <ScrollView style={{ flexDirection: "column", padding: 16 }}>
+      <View style={{ marginBottom: 20, flexDirection: "row" }}>
+        <Image
+          style={{ marginEnd: 10 }}
+          source={require("../assets/images/back_icon.png")}
+        />
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>Your Shop</Text>
       </View>
 
-
-      
       <View
         style={{
           width: "100%",
@@ -76,53 +87,144 @@ const ShopDetailsScreen = () => {
         <Text style={{ fontSize: 25 }}> {shopData.name}</Text>
       </View>
       <View style={{ flexDirection: "column" }}>
-        <TouchableOpacity
+        <Pressable
           onPress={handleToProductScreenNav}
-
           style={{
-            width:"100%",
-            borderRadius: 10,
-            
-            padding: 10,
-            flexDirection: "row",
-            backgroundColor: "#ffffff",
-            height: 50,
-            alignItems: "center",
+            marginBottom: 20,
+            flexDirection: "column",
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.8,
             shadowRadius: 2,
             elevation: 5,
-    
-            
-            marginBottom:10,
-
+            backgroundColor: "#ffffff",
+            borderRadius: 10,
           }}
         >
           <View
             style={{
-              padding: 5,
-              alignSelf:"start",
-              backgroundColor: "#82e6f4",
-              borderRadius: 6,
-              marginEnd: 10,
+              width: "100%",
+
+              padding: 10,
+              flexDirection: "row",
+
+              height: 50,
+              alignItems: "center",
             }}
           >
             <Image
               source={require("../assets/images/product_icon.png")}
-              style={{ height: 20, width: 20, resizeMode: "cover" }}
+              style={{
+                height: 20,
+                marginEnd: 8,
+                width: 20,
+                resizeMode: "cover",
+              }}
+            />
+
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginEnd: 8 }}>
+              Products
+            </Text>
+            <Image
+              source={require("../assets/images/back_icon.png")}
+              style={{
+                height: 20,
+                marginEnd: 8,
+                width: 20,
+                resizeMode: "cover",
+                transform: [{ rotate: "180deg" }],
+              }}
             />
           </View>
-          <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-            View Products
-          </Text>
-        
-          
-        </TouchableOpacity>
+        </Pressable>
+        <Pressable
+          onPress={handleUserDetailPress}
+          style={{
+            marginBottom: 20,
+            flexDirection: "column",
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            elevation: 5,
+            backgroundColor: "#ffffff",
+            borderRadius: 10,
+          }}
+        >
+          <View
+            style={{
+              width: "100%",
+              padding: 10,
+              flexDirection: "row",
+              height: 50,
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../assets/images/user_icon.png")}
+              style={{
+                height: 20,
+                marginEnd: 8,
+                width: 20,
+                resizeMode: "cover",
+              }}
+            />
 
-        <View style={{flexDirection: "row", width:"100%", justifyContent:"space-evenly", gap:10, marginBottom:10 }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginEnd: 6 }}>
+              Owner Details
+            </Text>
+            <Image
+              source={require("../assets/images/back_icon.png")}
+              style={{
+                height: 20,
+                marginEnd: 8,
+                width: 20,
+                resizeMode: "cover",
+                transform: isExpanded
+                  ? [{ rotate: "90deg" }]
+                  : [{ rotate: "270deg" }],
+              }}
+            />
+          </View>
+          {isExpanded && (
+            <View
+              style={{
+                padding: 10,
+                borderTopWidth: 1,
+                borderTopColor: "#ccc",
+              }}
+            >
+              {/* Add more user details here */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text>Name: {shopData.shopOwner.name}</Text>
+                <Image
+                  style={{ width: 18, height: 18 }}
+                  source={require("../assets/images/pencil_icon.png")}
+                />
+              </View>
+
+              <Text>Phone: {shopData.shopOwner.phone}</Text>
+              {/* Add more user details as needed */}
+            </View>
+          )}
+        </Pressable>
+
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-evenly",
+            gap: 10,
+            marginBottom: 20,
+          }}
+        >
           <ShopAttribute
-  
             attribute="Address"
             attributeValue={shopData.address}
           />
@@ -133,7 +235,15 @@ const ShopDetailsScreen = () => {
           />
         </View>
 
-        <View style={{ flexDirection: "row", width:"100%", justifyContent:"space-evenly", gap:10  }}>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-evenly",
+            gap: 10,
+            marginBottom: 20,
+          }}
+        >
           <ShopAttribute
             attribute="Rating"
             attributeValue={shopData.averageRating}
@@ -144,13 +254,49 @@ const ShopDetailsScreen = () => {
             attributeValue={shopData.totalProducts}
           />
         </View>
+
+        <View
+          onPress={handleToProductScreenNav}
+          style={{
+            flexDirection: "column",
+            shadowColor: "#000",
+            padding: 10,
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            elevation: 5,
+            backgroundColor: "#ffffff",
+            borderRadius: 10,
+          }}
+        >
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              marginBottom:10,
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../assets/images/map_icon.png")}
+              style={{
+                height: 20,
+                marginEnd: 8,
+                width: 20,
+                resizeMode: "cover",
+              }}
+            />
+
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginEnd: 8 }}>
+              Shop Location
+            </Text>
+            
+          </View>
+          <MapViewComp shop={shopData} />
+        </View>
       </View>
-      <View style={{position:"absolute", bottom:0, left:0, margin:18, flexDirection:"column", gap:-10, width:"100%", alignItems:"center"}}>
-      <Text style={{fontSize: 36, fontWeight:"bold", fontStyle:"italic", color:"#808080"}}>DezDash</Text>
-      <Text style={{fontSize: 20, fontWeight:"bold", fontStyle:"italic", color:"#808080"}}>by dezerto</Text>
-      </View>
-      
-    </View>
+      <View style={{ height: 40 }} />
+    </ScrollView>
   );
 };
 

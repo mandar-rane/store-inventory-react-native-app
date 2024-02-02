@@ -13,7 +13,7 @@ const attributeIconMapping = (attr) => {
       return require("../assets/images/shop_icon_1.png"); // Default image
     default:
       return require("../assets/images/shop_icon_1.png");
-  };
+  }
 };
 
 const trailTextMapping = (attr) => {
@@ -21,7 +21,7 @@ const trailTextMapping = (attr) => {
     case "rating":
       return "/5 Stars";
     case "products":
-      return " Total";
+      return "";
     default:
       return "";
   }
@@ -29,43 +29,37 @@ const trailTextMapping = (attr) => {
 
 const ShopAttribute = ({ attribute, attributeValue }) => {
   // Additional text based on the attribute
-  
 
   return (
     <View
       style={{
         flexDirection: "column",
-        height: 80,
-        width: 60,
-        flex: 1,
         
-        padding: 10,
-        alignItems: "start",
+        width: 150,
+        alignItems: "center",
         justifyContent: "center",
-        borderRadius: 15,
-       
-        backgroundColor:"#ffffff",
-        shadowColor: '#000',
+        borderRadius: 25,
+        padding:16,
+        backgroundColor: "#ffffff",
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.8,
-        shadowRadius: 2,  
-        elevation: 5
-    
+        shadowRadius: 2,
+        elevation: 5,
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "start", width:"100%" }}>
-        <View style={{ padding: 5, backgroundColor: "#82e6f4", borderRadius: 6, marginEnd:4 }}>
-          <Image
-            source={attributeIconMapping(attribute)}
-            style={{ height: 20, width: 20, resizeMode: "cover" }}
-          />
-        </View>
+      <Image
+        source={attributeIconMapping(attribute)}
+        style={{ height: 30, width: 30, resizeMode: "cover" , marginBottom:4}}
+      />
 
-        <Text style={{ fontSize: 17, fontWeight: "bold"}}> {attribute}</Text>
-      </View>
-      <View style={{ width: "100%", alignItems: "start", marginTop:4}}>
-        <Text style={{ fontSize: 16 }}>{attributeValue}{trailTextMapping(attribute)}</Text>
-      </View>
+      
+
+      <Text style={{ fontSize: 18 ,fontWeight: "bold"}}>
+        {attributeValue}
+        {trailTextMapping(attribute)}
+      </Text>
+      <Text style={{ fontSize: 14 }}> {attribute}</Text>
     </View>
   );
 };
