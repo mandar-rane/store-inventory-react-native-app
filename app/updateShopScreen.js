@@ -17,46 +17,34 @@ import * as ImagePicker from "expo-image-picker";
 import ImgUpload from "../components/ImgUpload";
 import RemoveImg from "../components/RemoveImg";
 import CustomModal from "../components/CustomModal";
+import EditLocation from "../components/EditLocation";
 
-const productDetail = () => {
+const updateShopScreen = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-  const { productId } = useGlobalSearchParams();
-  const [editedProduct, setEditedProduct] = useState({
+  const [editedShop, setEditedShop] = useState({
     name: "",
-    price: 0,
-    category: "",
-    description: "",
+    shopType: "",
     image: { key: "", url: "" },
-    vegnonveg: "",
-    stock: 0,
-    productCustomisations: [],
   });
   const [isFormValid, setIsFormValid] = useState(false);
-  const [priceWarning, setPriceWarning] = useState("");
-  const [newImageUrl, setNewImageUri] = useState("");
   const [isImageUploaded, setIsImageUploaded] = useState(false);
+  const [newImageUrl, setNewImageUri] = useState("");
 
   useEffect(() => {
     const isValid =
-      editedProduct.name.trim() !== "" &&
-      !isNaN(editedProduct.price) &&
-      editedProduct.price !== 0 &&
-      editedProduct.price !== "" &&
-      editedProduct.category.trim() !== "" &&
-      editedProduct.description.trim() !== "" &&
-      editedProduct.vegnonveg !== "";
+      editedShop.name.trim() !== "" && editedShop.shopType.trim() !== "";
     setIsFormValid(isValid);
-  }, [editedProduct, newImageUrl]);
+  }, [editedShop]);
 
-  const fetchProductDetails = async () => {
+  const fetchShopDetails = async () => {
     setIsLoading(true);
     setIsImageUploaded(false);
     try {
       const response = await axios.get(
-        `https://dzo.onrender.com/api/vi/shop/owner/shop/product/${productId}`,
+        `https://dzo.onrender.com/api/vi/shop/owner/shop/details`,
         {
           headers: {
             Authorization:
@@ -66,15 +54,15 @@ const productDetail = () => {
       );
       if (response.data.success) {
         setIsLoading(false);
-        setEditedProduct(response.data.product);
-        console.log(response.data.product);
+        setEditedShop(response.data.shop);
+        console.log(response.data.shop);
       } else {
         setIsLoading(false);
-        console.error("Failed to fetch product details");
+        console.error("Failed to fetch shop details");
       }
     } catch (error) {
       setIsLoading(false);
-      console.error("Error fetching product details:", error);
+      console.error("Error fetching shop details:", error);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -83,18 +71,18 @@ const productDetail = () => {
   };
 
   useEffect(() => {
-    fetchProductDetails();
+    fetchShopDetails();
   }, []);
 
   const handleInputChange = (field, value) => {
-    setEditedProduct((prevProduct) => ({
-      ...prevProduct,
+    setEditedShop((prevShop) => ({
+      ...prevShop,
       [field]:
         field === "price" ? (value === "" ? "" : parseInt(value)) : value,
     }));
   };
 
-  const handleUpdateProduct = async () => {
+  const handleUpdateShop = async () => {
     setIsLoading(true);
     try {
       const putFormData = new FormData();
@@ -105,17 +93,11 @@ const productDetail = () => {
           name: "image.jpg",
         });
       }
-      putFormData.append("name", editedProduct.name);
-      putFormData.append("price", editedProduct.price);
-      putFormData.append("category", editedProduct.category);
-      putFormData.append("description", editedProduct.description);
-      putFormData.append("vegnonveg", editedProduct.vegnonveg);
-      putFormData.append(
-        "stock",
-        isNaN(editedProduct.stock) ? 0 : editedProduct.stock
-      );
+      putFormData.append("name", editedShop.name);
+      putFormData.append("shopType", editedShop.shopType);
+
       const response = await axios.put(
-        `https://dzo.onrender.com/api/vi/shop/owner/shop/update/product/${productId}`,
+        "https://dzo.onrender.com/api/vi/shop/owner/update/shop/details",
         putFormData,
         {
           headers: {
@@ -127,15 +109,16 @@ const productDetail = () => {
       );
       if (response.data.success) {
         setIsSuccess(true);
-        console.log("Product updated successfully");
+        console.log("Shop updated successfully");
+        fetchShopDetails();
         
       } else {
         setIsError(true);
-        console.error("Failed to update product");
+        console.error("Failed to update shop");
       }
     } catch (error) {
       setIsError(true);
-      console.error("Error updating product:", error);
+      console.error("Error updating shop:", error);
     } finally {
       setIsLoading(false);
 
@@ -168,23 +151,13 @@ const productDetail = () => {
 
   return (
     <ScrollView style={{ flex: 1 }}>
-      <View
-        style={{
-          marginBottom: 20,
-          flexDirection: "row",
-          padding: 10,
-          alignItems: "center",
-        }}
-      >
-        <Pressable onPress={router.back}>
-          <Image
-            style={{ marginEnd: 10 }}
-            source={require("../assets/images/back_icon.png")}
-          />
-        </Pressable>
-
+      <View style={{ marginBottom: 20, flexDirection: "row", margin:10, alignItems:"center"  }}>
+        <Image
+          style={{ marginEnd: 10 }}
+          source={require("../assets/images/back_icon.png")}
+        />
         <Text style={{ fontSize: 22, fontWeight: "bold" }}>
-          Update your product
+          Update your shop
         </Text>
       </View>
 
@@ -198,7 +171,7 @@ const productDetail = () => {
           }}
         >
           <Image
-            source={{ uri: editedProduct.image.url }}
+            source={{ uri: editedShop.image.url }}
             style={{ height: 120, width: 120, borderRadius: 80 }}
           />
           <Image
@@ -213,42 +186,24 @@ const productDetail = () => {
       ) : (
         <View style={{ width: "100%", alignItems: "center" }}>
           <Image
-            source={{ uri: editedProduct.image.url }}
+            source={{ uri: editedShop.image.url }}
             style={{ height: 120, width: 120, borderRadius: 80 }}
           />
         </View>
       )}
 
-      <Text style={styles.label}>Product Name</Text>
+      <Text style={styles.label}>Shop Name</Text>
       <TextInput
         style={styles.input}
-        value={editedProduct.name}
+        value={editedShop.name}
         onChangeText={(text) => handleInputChange("name", text)}
       />
 
-      <Text style={styles.label}>Price</Text>
-      <TextInput
-        style={[styles.input, priceWarning && styles.inputError]}
-        value={editedProduct.price.toString()}
-        onChangeText={(text) => handleInputChange("price", text)}
-        keyboardType="numeric"
-      />
-      {priceWarning ? (
-        <Text style={styles.warningText}>{priceWarning}</Text>
-      ) : null}
-
-      <Text style={styles.label}>Category</Text>
+      <Text style={styles.label}>Shop Type</Text>
       <TextInput
         style={styles.input}
-        value={editedProduct.category}
-        onChangeText={(text) => handleInputChange("category", text)}
-      />
-
-      <Text style={styles.label}>Description</Text>
-      <TextInput
-        style={styles.input}
-        value={editedProduct.description}
-        onChangeText={(text) => handleInputChange("description", text)}
+        value={editedShop.shopType}
+        onChangeText={(text) => handleInputChange("shopType", text)}
       />
 
       <View style={{ flexDirection: "row", flex: 2, marginHorizontal: 10 }}>
@@ -258,7 +213,7 @@ const productDetail = () => {
               fontSize: 16,
               fontWeight: "bold",
               marginTop: 10,
-              marginBottom: 8,
+              marginBottom: 6,
             }}
           >
             Image
@@ -275,76 +230,21 @@ const productDetail = () => {
         </View>
 
         <View style={{ flex: 1 }}>
-          <Text
+        <Text
             style={{
               fontSize: 16,
               fontWeight: "bold",
               marginTop: 10,
-              marginBottom: 8,
+              marginBottom: 6,
             }}
           >
-            Stock
+            Location
           </Text>
-          <View style={styles.stockcontainer}>
-            <TouchableOpacity
-              onPress={() =>
-                handleInputChange("stock", editedProduct.stock - 1)
-              }
-              style={[
-                styles.stockbutton,
-                editedProduct.stock === 0 && styles.stockdisabledButton,
-              ]}
-              disabled={editedProduct.stock === 0}
-            >
-              <Text style={styles.stockbuttonText}>-</Text>
-            </TouchableOpacity>
-            <Text style={styles.stockValue}>{editedProduct.stock}</Text>
-            <TouchableOpacity
-              onPress={() =>
-                handleInputChange("stock", editedProduct.stock + 1)
-              }
-              style={styles.stockbutton}
-            >
-              <Text style={styles.stockbuttonText}>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
 
-      <Text style={styles.label}>Veg/Non-Veg</Text>
-      <View style={styles.vegNonVegContainer}>
-        <TouchableOpacity
-          style={[
-            styles.vegNonVegButton,
-            editedProduct.vegnonveg === "veg" && styles.selectedButton,
-          ]}
-          onPress={() => handleInputChange("vegnonveg", "veg")}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              editedProduct.vegnonveg === "veg" && styles.selectedButtonText,
-            ]}
-          >
-            Veg
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.vegNonVegButton,
-            editedProduct.vegnonveg === "nonveg" && styles.selectedButton,
-          ]}
-          onPress={() => handleInputChange("vegnonveg", "nonveg")}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              editedProduct.vegnonveg === "nonveg" && styles.selectedButtonText,
-            ]}
-          >
-            Non-Veg
-          </Text>
-        </TouchableOpacity>
+          <Pressable onPress={removeSelectedImg}>
+            <EditLocation />
+          </Pressable>
+        </View>
       </View>
 
       <TouchableOpacity
@@ -358,28 +258,24 @@ const productDetail = () => {
           justifyContent: "center",
           marginHorizontal: 10,
         }}
-        onPress={handleUpdateProduct}
+        onPress={handleUpdateShop}
         disabled={!isFormValid}
       >
-        <Text style={{ color: "white", fontSize: 18 }}>Update Product</Text>
+        <Text style={{ color: "white", fontSize: 18 }}>Update Shop</Text>
       </TouchableOpacity>
       <View style={{ height: 20 }} />
 
-      {isLoading || isSuccess || isError ? (
+      {/* {isLoading || isSuccess || isError ? (
         <View style={styles.overlay} />
-      ) : null}
+      ) : null} */}
 
       <CustomModal visible={isLoading} type="loading" msg="" />
       <CustomModal
         visible={isSuccess}
         type="success"
-        msg="Product updated successfully"
+        msg="Shop updated successfully"
       />
-      <CustomModal
-        visible={isError}
-        type="error"
-        msg="Failed to update product"
-      />
+      <CustomModal visible={isError} type="error" msg="Failed to update Shop" />
     </ScrollView>
   );
 };
@@ -389,7 +285,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginTop: 10,
-    marginBottom: 8,
+    marginBottom: 6,
     marginHorizontal: 10,
   },
   input: {
@@ -417,8 +313,8 @@ const styles = StyleSheet.create({
   vegNonVegContainer: {
     marginHorizontal: 10,
     flexDirection: "row",
-    justifyContent: "space-between"
-
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   vegNonVegButton: {
     flex: 1,
@@ -471,4 +367,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default productDetail;
+export default updateShopScreen;

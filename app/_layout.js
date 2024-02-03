@@ -5,7 +5,7 @@ import store from "../redux/store/store";
 const RootLayout = () => {
   return (
     <Provider store={store}>
-      <Stack screenOptions={{ headerShown: false, statusBarHidden: false }}>
+      <Stack screenOptions={{ headerShown: false, statusBarHidden: true }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="otpScreen" />
         <Stack.Screen name="ordersScreen" />
@@ -14,6 +14,8 @@ const RootLayout = () => {
         <Stack.Screen name="productScreen" />
         <Stack.Screen name="addProductScreen" />
         <Stack.Screen name="shopDetailsScreen" />
+        <Stack.Screen name="updateShopScreen" />
+        
         
       </Stack>
     </Provider>

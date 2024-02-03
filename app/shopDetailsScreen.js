@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback} from "react";
 import {
   View,
   Text,
@@ -10,13 +10,19 @@ import {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import ShopAttribute from "../components/ShopAttribute";
-import { Stack, useRouter, Link } from "expo-router";
+import { Stack, useRouter, Link , useFocusEffect} from "expo-router";
 import MapViewComp from "../components/MapViewComp";
 
 const ShopDetailsScreen = () => {
   const [shopData, setShopData] = useState(null);
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  useFocusEffect(
+    useCallback(() => {
+      console.log("resumed");
+      fetchShopDetails();
+    }, [])
+  );
 
   const handleToProductScreenNav = () => {
     router.push({ pathname: "/productScreen" });
@@ -26,9 +32,11 @@ const ShopDetailsScreen = () => {
     setIsExpanded(!isExpanded);
   };
 
+ 
+
   // const shopFromStore = useSelector((state) => state.shopReducer);
 
-  useEffect(() => {
+  const fetchShopDetails = () =>{
     const apiUrl = "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
     const token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk5YzFmMjE5ZjJjYTA1NGIwNjQ3NzUiLCJpYXQiOjE3MDQ1NzU0NzR9.9Q3tc2QcLs9d5jVG4sF3bER9DR7JHdmieOd8NI5qeMw";
@@ -45,6 +53,10 @@ const ShopDetailsScreen = () => {
       .catch((error) => {
         console.error("Error fetching shop details:", error);
       });
+  }
+
+  useEffect(() => {
+    fetchShopDetails();
   }, []);
 
   if (!shopData) {
@@ -56,13 +68,13 @@ const ShopDetailsScreen = () => {
   }
 
   return (
-    <ScrollView style={{ flexDirection: "column", padding: 16 }}>
-      <View style={{ marginBottom: 20, flexDirection: "row" }}>
+    <ScrollView style={{ flexDirection: "column", padding: 10 }}>
+      <View style={{ marginBottom: 20, flexDirection: "row", alignItems:"center" }}>
         <Image
           style={{ marginEnd: 10 }}
           source={require("../assets/images/back_icon.png")}
         />
-        <Text style={{ fontSize: 24, fontWeight: "bold" }}>Your Shop</Text>
+        <Text style={{ fontSize: 22, fontWeight: "bold" }}>Your Shop</Text>
       </View>
 
       <View
@@ -70,11 +82,11 @@ const ShopDetailsScreen = () => {
           width: "100%",
           alignItems: "center",
           flexDirection: "column",
-          marginBottom: 16,
+          marginBottom: 20,
         }}
       >
         <Image
-          source={{ uri: shopData.image }}
+          source={{ uri: shopData.image.url }}
           style={{
             width: 200,
             height: 200,
@@ -85,8 +97,61 @@ const ShopDetailsScreen = () => {
         />
 
         <Text style={{ fontSize: 25 }}> {shopData.name}</Text>
+
+        <Pressable
+          onPress={() =>
+            router.push({
+              pathname: "/updateShopScreen",
+            })
+          }
+        >
+          <Text style={{ textDecorationLine: "underline" }}>
+            {" "}
+            Update Details
+          </Text>
+        </Pressable>
       </View>
       <View style={{ flexDirection: "column" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-evenly",
+            gap: 10,
+            marginBottom: 20,
+          }}
+        >
+          <ShopAttribute
+            attribute="Address"
+            attributeValue={shopData.address}
+          />
+
+          <ShopAttribute
+            attribute="Shop Type"
+            attributeValue={shopData.shopType}
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-evenly",
+            gap: 10,
+            marginBottom: 20,
+          }}
+        >
+          <ShopAttribute
+            attribute="Rating"
+            attributeValue={shopData.averageRating}
+          />
+
+          <ShopAttribute
+            attribute="Products"
+            attributeValue={shopData.totalProducts}
+          />
+        </View>
+
         <Pressable
           onPress={handleToProductScreenNav}
           style={{
@@ -216,46 +281,6 @@ const ShopDetailsScreen = () => {
         </Pressable>
 
         <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            justifyContent: "space-evenly",
-            gap: 10,
-            marginBottom: 20,
-          }}
-        >
-          <ShopAttribute
-            attribute="Address"
-            attributeValue={shopData.address}
-          />
-
-          <ShopAttribute
-            attribute="Shop Type"
-            attributeValue={shopData.shopType}
-          />
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            justifyContent: "space-evenly",
-            gap: 10,
-            marginBottom: 20,
-          }}
-        >
-          <ShopAttribute
-            attribute="Rating"
-            attributeValue={shopData.averageRating}
-          />
-
-          <ShopAttribute
-            attribute="Products"
-            attributeValue={shopData.totalProducts}
-          />
-        </View>
-
-        <View
           onPress={handleToProductScreenNav}
           style={{
             flexDirection: "column",
@@ -273,7 +298,7 @@ const ShopDetailsScreen = () => {
             style={{
               width: "100%",
               flexDirection: "row",
-              marginBottom:10,
+              marginBottom: 10,
               alignItems: "center",
             }}
           >
@@ -290,7 +315,6 @@ const ShopDetailsScreen = () => {
             <Text style={{ fontSize: 18, fontWeight: "bold", marginEnd: 8 }}>
               Shop Location
             </Text>
-            
           </View>
           <MapViewComp shop={shopData} />
         </View>

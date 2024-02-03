@@ -13,51 +13,89 @@ import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
 import { useDispatch } from "react-redux";
 import { setShopDetails } from "../redux/actions/shopActions";
 import Order from "../components/Order";
+import * as SecureStore from "expo-secure-store";
 
 const OrdersScreen = () => {
   const router = useRouter();
   const [orders, setOrders] = useState([]);
+  const [shopData, setShopData] = useState({
+    name: "",
+    image: { url: "", key: "" },
+    shopOwner: { name: "" },
+  });
+  
   const dispatch = useDispatch();
 
   const handleSetShopDetails = (item) => {
-    dispatch(setShopDetails(item));
+    setShopData(item);
+    // dispatch(setShopDetails(item));
+  };
+
+  const fetchShopDetails = async () => {
+    try {
+      const key = "accessTkn"; // replace with your actual key
+      const bearerToken = await SecureStore.getItemAsync(key);
+
+      if (bearerToken) {
+        const shopDetailsApiEndpoint =
+          "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
+
+        axios
+          .get(shopDetailsApiEndpoint, {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          })
+          .then((response) => {
+            handleSetShopDetails(response.data.shop);
+            console.log(response.data.shop);
+          })
+          .catch((error) => {
+            console.error("Error fetching shop details:", error);
+          });
+      } else {
+        console.error("Token not found in SecureStore");
+      }
+    } catch (error) {
+      console.error("Error retrieving token from SecureStore:", error);
+    }
+  };
+
+  const fetchAllOrders = async () => {
+    try {
+      const key = "accessTkn"; // replace with your actual key
+      const bearerToken = await SecureStore.getItemAsync(key);
+
+      if (bearerToken) {
+        const fetchAllOrdersApiEndpoint =
+          "https://dzo.onrender.com/api/vi/shop/owner/shop/orders/all";
+
+        axios
+          .get(fetchAllOrdersApiEndpoint, {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          })
+          .then((response) => {
+            setOrders(response.data.orders);
+          })
+          .catch((error) => {
+            console.error("Error fetching orders:", error);
+          });
+      } else {
+        console.error("Token not found in SecureStore");
+      }
+    } catch (error) {
+      console.error("Error retrieving token from SecureStore:", error);
+    }
   };
 
   useEffect(() => {
-    const bearerToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk5YzFmMjE5ZjJjYTA1NGIwNjQ3NzUiLCJpYXQiOjE3MDQ1NzU0NzR9.9Q3tc2QcLs9d5jVG4sF3bER9DR7JHdmieOd8NI5qeMw";
+    fetchAllOrders();
+  }, []);
 
-    const shopDetailsApiEndpoint =
-      "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
-
-    axios
-      .get(shopDetailsApiEndpoint, {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      })
-      .then((response) => {
-        handleSetShopDetails(response.data.shop);
-      })
-      .catch((error) => {
-        console.error("Error fetching shop details:", error);
-      });
-
-    const fetchAllOrdersApiEndpoint =
-      "https://dzo.onrender.com/api/vi/shop/owner/shop/orders/all";
-
-    axios
-      .get(fetchAllOrdersApiEndpoint, {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      })
-      .then((response) => {
-        setOrders(response.data.orders);
-      })
-      .catch((error) => {
-        console.error("Error fetching orders:", error);
-      });
+  useEffect(() => {
+    fetchShopDetails();
   }, []);
 
   const renderOrderItem = ({ item }) => (
@@ -79,7 +117,7 @@ const OrdersScreen = () => {
       />
     </Pressable>
   );
-  
+
   const ordersByStatus = orders.reduce((acc, order) => {
     const status = order.orderStatus.toLowerCase();
     if (!acc[status]) {
@@ -92,38 +130,36 @@ const OrdersScreen = () => {
   const sections = Object.keys(ordersByStatus)
     .sort((a, b) => {
       // Specify the desired order
-      const order = ['placed', 'delivered', 'cancelled'];
+      const order = ["placed", "delivered", "cancelled"];
       return order.indexOf(a) - order.indexOf(b);
     })
     .map((status) => ({
       title: status.toUpperCase(),
       data: ordersByStatus[status],
     }));
-  
-    if(!orders){
 
-      return(
-        <Text>LOL</Text>
-      )
-    }
+  if (!orders) {
+    return <Text>LOL</Text>;
+  }
 
   return (
     <ScrollView
-      style={{ flexDirection: "column", padding: 10, backgroundColor: "white" }}
+      style={{ flexDirection: "column", backgroundColor: "white" }}
     >
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
           flex: 1,
-          marginBottom: 30,
+          marginTop:10,
+          marginBottom: 10,
         }}
       >
         <View style={{ flex: 1 }}>
-          <Image
+          {/* <Image
             style={{ width: 30, height: 30, resizeMode: "contain" }}
             source={require("dezdash/assets/images/shop_icon.png")}
-          />
+          /> */}
         </View>
 
         <View
@@ -146,10 +182,30 @@ const OrdersScreen = () => {
         </View>
 
         <View style={{ flex: 1, alignItems: "flex-end" }}>
-          <Image
+          {/* <Image
             style={{ width: 30, height: 30, resizeMode: "contain" }}
             source={require("dezdash/assets/images/user_icon.png")}
-          />
+          /> */}
+        </View>
+      </View>
+
+      <View
+        style={{
+          flexDirection: "row",
+          backgroundColor: "#97ecf1",
+          alignItems: "center",
+          padding:10,
+          marginBottom:10
+        }}
+      >
+        <Image
+          style={{ width: 75, height: 75, resizeMode: "cover", borderRadius:50, marginEnd:10 }}
+          source={{uri:shopData.image.url}}
+        />
+        <View style={{ flexDirection: "column" }}>
+          <Text style={{fontSize:20, fontWeight:"bold"}}>{shopData.name}</Text>
+          <Text>Welcome {shopData.shopOwner.name}</Text>
+          
         </View>
       </View>
 
@@ -167,14 +223,13 @@ const OrdersScreen = () => {
             justifyContent: "center",
             height: 100,
             width: 100,
-        
+
             flexDirection: "column",
             flex: 1,
             alignItems: "center",
             borderColor: "#bdbdbd",
             borderWidth: 1,
             borderRadius: 25,
-          
           }}
         >
           <Image
@@ -197,7 +252,7 @@ const OrdersScreen = () => {
             flexDirection: "column",
             flex: 1,
             alignItems: "center",
-            backgroundColor:"#ffffff",
+            backgroundColor: "#ffffff",
             borderRadius: 25,
             borderColor: "#bdbdbd",
             borderWidth: 1,
@@ -212,11 +267,15 @@ const OrdersScreen = () => {
       </View>
 
       <View
-        style={{ marginTop: 16,flexDirection: "row", alignItems: "center", marginBottom: 10 }}
+        style={{
+          marginTop: 16,
+          flexDirection: "row",
+          alignItems: "center",
+          marginBottom: 10,
+        }}
       >
         <View
           style={{
-            
             flex: 1,
             height: 1,
             backgroundColor: "#abb7b7",
@@ -224,17 +283,16 @@ const OrdersScreen = () => {
           }}
         />
         <View>
-        <Text
-          style={{
-            marginHorizontal: 16,
-            
-            fontSize: 24,
-            fontWeight: "bold",
-          
-          }}
-        >
-          My Orders
-        </Text>
+          <Text
+            style={{
+              marginHorizontal: 16,
+
+              fontSize: 24,
+              fontWeight: "bold",
+            }}
+          >
+            My Orders
+          </Text>
         </View>
         <View
           style={{
@@ -245,36 +303,38 @@ const OrdersScreen = () => {
           }}
         />
       </View>
-      
 
       <View
         style={{
-          
           flexDirection: "column",
           marginTop: 5,
-
+          margin:10,
           borderRadius: 25,
           borderColor: "#bdbdbd",
           borderWidth: 1,
         }}
       >
-        
-
         <SectionList
           sections={sections}
           keyExtractor={(item) => item._id}
           renderItem={renderOrderItem}
           renderSectionHeader={({ section: { title } }) => (
-            <View style={{width:"100%", alignItems:"center", marginVertical:10}}>
-
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>{title} ORDERS</Text>
-
+            <View
+              style={{
+                width: "100%",
+                alignItems: "center",
+                marginVertical: 10,
+              }}
+            >
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                {title} ORDERS
+              </Text>
             </View>
           )}
         />
       </View>
 
-      <View style={{height:20}}/>
+      <View style={{ height: 20 }} />
     </ScrollView>
   );
 };

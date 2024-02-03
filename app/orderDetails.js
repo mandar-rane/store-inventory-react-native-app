@@ -6,10 +6,12 @@ import { ScrollView } from "react-native-gesture-handler";
 import OrderMetadata from "../components/OrderMetadata";
 import OrderProduct from "../components/OrderProduct";
 
+
 const orderDetails = () => {
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState(null);
   const { orderId } = useGlobalSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchOrderDetails = async () => {
     try {
@@ -126,25 +128,7 @@ const orderDetails = () => {
         </View>
       </View>
 
-      <View
-        style={{
-          alignItems: "center",
-          marginBottom: 20,
-          borderRadius: 10,
-          borderColor: "#bdbdbd",
-          borderWidth: 1
-          
-        }}
-      >
-        <OrderMetadata
-          orderID={orderDetails._id}
-          custUsername={orderDetails.user.username}
-          custPhone={orderDetails.user.phone}
-          orderStatus={orderDetails.orderStatus}
-          orderTotal={orderDetails.orderTotal}
-          orderDate={orderDetails.createdAtDate}
-        />
-      </View>
+      
 
       <View
         style={{
@@ -190,7 +174,27 @@ const orderDetails = () => {
           />
         </View>
       </View>
-      <View style={{height:40}}/>
+      <View style={{height:20}}/>
+
+      <View
+        style={{
+          alignItems: "center",
+          marginBottom: 20,
+          borderRadius: 10,
+          borderColor: "#bdbdbd",
+          borderWidth: 1
+          
+        }}
+      >
+        <OrderMetadata
+          orderID={orderDetails._id}
+          custUsername={orderDetails.user.username}
+          custPhone={orderDetails.user.phone}
+          orderStatus={orderDetails.orderStatus}
+          orderTotal={orderDetails.orderTotal}
+          orderDate={orderDetails.createdAtDate}
+        />
+      </View>
 
       
     

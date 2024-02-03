@@ -47,7 +47,7 @@ const otpScreen = () => {
 
         if (otpResponse.data.success) {
           saveToken("accessTkn", otpResponse.data.token);
-          router.push({ pathname: "/ordersScreen" });
+          router.replace({ pathname: "/ordersScreen" });
         }
       } catch (error) {
         console.log("API Error: ", error);

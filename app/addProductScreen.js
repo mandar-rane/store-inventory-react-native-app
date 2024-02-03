@@ -14,6 +14,7 @@ import ImgUpload from "../components/ImgUpload";
 import RemoveImg from "../components/RemoveImg";
 import axios from "axios";
 import CustomModal from "../components/CustomModal";
+import { router } from "expo-router";
 
 const addProductScreen = () => {
   const [productData, setProductData] = useState({
@@ -121,10 +122,15 @@ const addProductScreen = () => {
   return (
     <View style={{ flexDirection: "column", padding: 15, flex:1 }}>
       <View style={{ marginBottom: 20, flexDirection: "row" }}>
+        <Pressable onPress={router.back}>
+
         <Image
           style={{ marginEnd: 10 }}
           source={require("../assets/images/back_icon.png")}
         />
+
+        </Pressable>
+        
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>Add product</Text>
       </View>
 
