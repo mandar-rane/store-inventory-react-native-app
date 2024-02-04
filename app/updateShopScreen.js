@@ -18,6 +18,8 @@ import ImgUpload from "../components/ImgUpload";
 import RemoveImg from "../components/RemoveImg";
 import CustomModal from "../components/CustomModal";
 import EditLocation from "../components/EditLocation";
+import MapViewComp from "../components/MapViewComp";
+import * as SecureStore from 'expo-secure-store'; 
 
 const updateShopScreen = () => {
   const router = useRouter();
@@ -28,6 +30,7 @@ const updateShopScreen = () => {
     name: "",
     shopType: "",
     image: { key: "", url: "" },
+    location: {coordinates:[]}
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
@@ -42,23 +45,32 @@ const updateShopScreen = () => {
   const fetchShopDetails = async () => {
     setIsLoading(true);
     setIsImageUploaded(false);
+  
     try {
-      const response = await axios.get(
-        `https://dzo.onrender.com/api/vi/shop/owner/shop/details`,
-        {
+      const key = "accessTkn";
+      const bearerToken = await SecureStore.getItemAsync(key);
+  
+      if (bearerToken) {
+        const shopDetailsApiEndpoint =
+          "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
+  
+        const response = await axios.get(shopDetailsApiEndpoint, {
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk5YzFmMjE5ZjJjYTA1NGIwNjQ3NzUiLCJpYXQiOjE3MDQ1NzU0NzR9.9Q3tc2QcLs9d5jVG4sF3bER9DR7JHdmieOd8NI5qeMw",
+            Authorization: `Bearer ${bearerToken}`,
           },
+        });
+  
+        if (response.data.success) {
+          setIsLoading(false);
+          setEditedShop(response.data.shop);
+          console.log(response.data.shop);
+        } else {
+          setIsLoading(false);
+          console.error("Failed to fetch shop details");
         }
-      );
-      if (response.data.success) {
-        setIsLoading(false);
-        setEditedShop(response.data.shop);
-        console.log(response.data.shop);
       } else {
+        console.error("Token not found in SecureStore");
         setIsLoading(false);
-        console.error("Failed to fetch shop details");
       }
     } catch (error) {
       setIsLoading(false);
@@ -84,44 +96,53 @@ const updateShopScreen = () => {
 
   const handleUpdateShop = async () => {
     setIsLoading(true);
+  
     try {
-      const putFormData = new FormData();
-      if (newImageUrl !== "") {
-        putFormData.append("image", {
-          uri: newImageUrl,
-          type: "image/jpeg",
-          name: "image.jpg",
-        });
-      }
-      putFormData.append("name", editedShop.name);
-      putFormData.append("shopType", editedShop.shopType);
-
-      const response = await axios.put(
-        "https://dzo.onrender.com/api/vi/shop/owner/update/shop/details",
-        putFormData,
-        {
+      const key = "accessTkn";
+      const bearerToken = await SecureStore.getItemAsync(key);
+  
+      if (bearerToken) {
+        const putFormData = new FormData();
+  
+        if (newImageUrl !== "") {
+          putFormData.append("image", {
+            uri: newImageUrl,
+            type: "image/jpeg",
+            name: "image.jpg",
+          });
+        }
+  
+        putFormData.append("name", editedShop.name);
+        putFormData.append("shopType", editedShop.shopType);
+  
+        const updateShopApiEndpoint =
+          "https://dzo.onrender.com/api/vi/shop/owner/update/shop/details";
+  
+        const response = await axios.put(updateShopApiEndpoint, putFormData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk5YzFmMjE5ZjJjYTA1NGIwNjQ3NzUiLCJpYXQiOjE3MDQ1NzU0NzR9.9Q3tc2QcLs9d5jVG4sF3bER9DR7JHdmieOd8NI5qeMw",
+            Authorization: `Bearer ${bearerToken}`,
           },
+        });
+  
+        if (response.data.success) {
+          setIsSuccess(true);
+          console.log("Shop updated successfully");
+          fetchShopDetails();
+        } else {
+          setIsError(true);
+          console.error("Failed to update shop");
         }
-      );
-      if (response.data.success) {
-        setIsSuccess(true);
-        console.log("Shop updated successfully");
-        fetchShopDetails();
-        
       } else {
+        console.error("Token not found in SecureStore");
         setIsError(true);
-        console.error("Failed to update shop");
       }
     } catch (error) {
       setIsError(true);
       console.error("Error updating shop:", error);
     } finally {
       setIsLoading(false);
-
+  
       setTimeout(() => {
         setIsSuccess(false);
         setIsError(false);
@@ -250,6 +271,7 @@ const updateShopScreen = () => {
           </Pressable>
         </View>
       </View>
+      {/* <MapViewComp shop={editedShop} /> */}
 
       <TouchableOpacity
         style={{
@@ -265,6 +287,7 @@ const updateShopScreen = () => {
         onPress={handleUpdateShop}
         disabled={!isFormValid}
       >
+
         <Text style={{ color: "white", fontSize: 18 }}>Update Shop</Text>
       </TouchableOpacity>
       <View style={{ height: 20 }} />

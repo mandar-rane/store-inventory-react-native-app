@@ -33,7 +33,7 @@ const OrdersScreen = () => {
 
   const fetchShopDetails = async () => {
     try {
-      const key = "accessTkn"; // replace with your actual key
+      const key = "accessTkn"; 
       const bearerToken = await SecureStore.getItemAsync(key);
 
       if (bearerToken) {

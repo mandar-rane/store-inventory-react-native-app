@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import ShopAttribute from "../components/ShopAttribute";
 import { Stack, useRouter, Link , useFocusEffect} from "expo-router";
 import MapViewComp from "../components/MapViewComp";
-
+import * as SecureStore from "expo-secure-store";
 
 const ShopDetailsScreen = () => {
   const [shopData, setShopData] = useState(null);
@@ -37,23 +37,29 @@ const ShopDetailsScreen = () => {
 
   // const shopFromStore = useSelector((state) => state.shopReducer);
 
-  const fetchShopDetails = () =>{
-    const apiUrl = "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk5YzFmMjE5ZjJjYTA1NGIwNjQ3NzUiLCJpYXQiOjE3MDQ1NzU0NzR9.9Q3tc2QcLs9d5jVG4sF3bER9DR7JHdmieOd8NI5qeMw";
-
-    axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+  const fetchShopDetails = async () =>{
+    try {
+      const key = "accessTkn";
+      const bearerToken = await SecureStore.getItemAsync(key);
+  
+      if (bearerToken) {
+        const shopDetailsApiEndpoint =
+          "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
+  
+        const response = await axios.get(shopDetailsApiEndpoint, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+  
         setShopData(response.data.shop);
-      })
-      .catch((error) => {
-        console.error("Error fetching shop details:", error);
-      });
+        console.log(response.data.shop);
+      } else {
+        console.error("Token not found in SecureStore");
+      }
+    } catch (error) {
+      console.error("Error retrieving token from SecureStore:", error);
+    }
   }
 
   useEffect(() => {

@@ -44,7 +44,7 @@ const Home = () => {
 
   const handleLogin = () => {
     if (isPhoneNumValid) {
-      router.replace({ pathname: "/shopDetailsScreen", params: { phoneNum: phoneNum } });
+      router.replace({ pathname: "/otpScreen", params: { phoneNum: phoneNum } });
     } else {
       if (Platform.OS == "android") {
         ToastAndroid.show("Enter Correct Number", ToastAndroid.SHORT);

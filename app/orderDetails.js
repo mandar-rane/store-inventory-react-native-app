@@ -5,7 +5,7 @@ import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import OrderMetadata from "../components/OrderMetadata";
 import OrderProduct from "../components/OrderProduct";
-
+import * as SecureStore from 'expo-secure-store';
 
 const orderDetails = () => {
   const router = useRouter();
@@ -15,21 +15,28 @@ const orderDetails = () => {
 
   const fetchOrderDetails = async () => {
     try {
-      const response = await axios.get(
-        `https://dzo.onrender.com/api/vi/shop/owner/shop/order/${orderId}`,
-        {
+      const key = "accessTkn";
+      const bearerToken = await SecureStore.getItemAsync(key);
+  
+      if (bearerToken) {
+        const orderDetailsApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/order/${orderId}`;
+  
+        const response = await axios.get(orderDetailsApiEndpoint, {
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTk5YzFmMjE5ZjJjYTA1NGIwNjQ3NzUiLCJpYXQiOjE3MDQ1NzU0NzR9.9Q3tc2QcLs9d5jVG4sF3bER9DR7JHdmieOd8NI5qeMw",
+            Authorization: `Bearer ${bearerToken}`,
           },
-        }
-      );
-      console.log(response.data.order);
-      setOrderDetails(response.data.order);
+        });
+  
+        console.log(response.data.order);
+        setOrderDetails(response.data.order);
+      } else {
+        console.error("Token not found in SecureStore");
+      }
     } catch (error) {
       console.error("Error fetching order details:", error);
     }
   };
+  
   useEffect(() => {
     fetchOrderDetails();
   }, []);

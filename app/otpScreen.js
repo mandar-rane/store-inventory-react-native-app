@@ -253,7 +253,7 @@ const otpScreen = () => {
         </Pressable>
       </View>
 
-      <View
+      {/* <View
         style={{
           flexDirection: "column",
           alignItems: "center",
@@ -273,7 +273,7 @@ const otpScreen = () => {
             Content Policy
           </Text>
         </View>
-      </View>
+      </View> */}
     </KeyboardAvoidingView>
   );
 };

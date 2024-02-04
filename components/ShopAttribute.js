@@ -55,7 +55,7 @@ const ShopAttribute = ({ attribute, attributeValue }) => {
 
       
 
-      <Text style={{ fontSize: 18 ,fontWeight: "bold"}}>
+      <Text numberOfLines={1} style={{ fontSize: 18 ,fontWeight: "bold"}}>
         {attributeValue}
         {trailTextMapping(attribute)}
       </Text>

@@ -48,6 +48,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
+    borderColor:"#000000",
+    borderWidth:1,
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,

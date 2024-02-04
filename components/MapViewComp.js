@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { PROVIDER_GOOGLE } from "react-native-maps";
 
-const MapViewComp = ({ shop }) => {
+const MapViewComp = ({ shop, editedShop }) => {
   const coordinates = shop.location.coordinates;
   return (
     <View>
@@ -18,7 +18,7 @@ const MapViewComp = ({ shop }) => {
         }}
       >
       <Marker
-      style={{height:100, width:100}}
+      style={{height:32, width:32}}
       image={require("../assets/images/shop_icon_3.png")}
           coordinate={{
             latitude: coordinates[1],
