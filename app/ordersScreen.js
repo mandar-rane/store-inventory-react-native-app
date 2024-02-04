@@ -192,7 +192,7 @@ const OrdersScreen = () => {
       <View
         style={{
           flexDirection: "row",
-          backgroundColor: "#97ecf1",
+          backgroundColor: "#c8f1ec",
           alignItems: "center",
           padding:10,
           marginBottom:10

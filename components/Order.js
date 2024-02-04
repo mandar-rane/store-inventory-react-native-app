@@ -7,9 +7,11 @@ const getStatusColor = (status) => {
     case "placed":
       return "#daa520";
     case "cancelled":
-      return "#CC2936"; 
+      return "#CC2936";
     case "delivered":
-      return "#378805"; 
+      return "#378805";
+    case "otw":
+      return "#ff6701";
     default:
       return "#ededed"; // Default color
   }
@@ -27,7 +29,7 @@ const Order = ({
   const formattedDate = orderDate;
 
   return (
-    <View >
+    <View>
       <View>
         <View
           style={{
