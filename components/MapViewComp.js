@@ -18,8 +18,7 @@ const MapViewComp = ({ shop, editedShop }) => {
         }}
       >
       <Marker
-      style={{height:32, width:32}}
-      image={require("../assets/images/shop_icon_3.png")}
+      image={require("../assets/images/shop_icon_2.png")}
           coordinate={{
             latitude: coordinates[1],
             longitude: coordinates[0],

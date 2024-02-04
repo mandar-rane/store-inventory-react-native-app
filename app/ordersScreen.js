@@ -15,6 +15,7 @@ import { setShopDetails } from "../redux/actions/shopActions";
 import Order from "../components/Order";
 import * as SecureStore from "expo-secure-store";
 
+
 const OrdersScreen = () => {
   const router = useRouter();
   const [orders, setOrders] = useState([]);
@@ -182,10 +183,19 @@ const OrdersScreen = () => {
         </View>
 
         <View style={{ flex: 1, alignItems: "flex-end" }}>
-          {/* <Image
+          <Pressable  onPress={() =>
+        router.push({
+          pathname: "/createShopScreen",
+     
+        })
+      }>
+
+          <Image 
             style={{ width: 30, height: 30, resizeMode: "contain" }}
             source={require("dezdash/assets/images/user_icon.png")}
-          /> */}
+          />
+          </Pressable>
+          
         </View>
       </View>
 

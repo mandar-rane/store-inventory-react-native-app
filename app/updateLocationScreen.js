@@ -17,7 +17,7 @@ import * as Location from "expo-location";
 const screenWidth = Dimensions.get("window").width;
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import CustomModal from "../components/CustomModal";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 const updateLocationScreen = () => {
   const [initialRegion, setInitialRegion] = useState({
@@ -42,17 +42,17 @@ const updateLocationScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-  const apiKey = 'AIzaSyArRpkPQqwY0EDi0cO4m6JAWOTzk9PY6Xk';
+  const apiKey = "AIzaSyArRpkPQqwY0EDi0cO4m6JAWOTzk9PY6Xk";
 
-  useEffect(() => {
-    const isValid =
-      locationData.areaLocality.trim() !== "" &&
-      locationData.buildingPlot.trim() !== "" &&
-      locationData.latitude !== "" &&
-      locationData.longitude !== ""
-      
-    setIsFormValid(isValid);
-  }, [locationData]);
+  // useEffect(() => {
+  //   const isValid =
+  //     locationData.areaLocality.trim() !== "" &&
+  //     locationData.buildingPlot.trim() !== "" &&
+  //     locationData.latitude !== "" &&
+  //     locationData.longitude !== ""
+
+  //   setIsFormValid(isValid);
+  // }, [locationData]);
 
   const updateLocationData = () => {
     setLocationData((prevState) => ({
@@ -96,6 +96,7 @@ const updateLocationScreen = () => {
       locationData.longitude !== "" &&
       buildingPlot !== "" &&
       areaLocality !== "";
+    setIsFormValid(isValid);
   }, [
     initialRegion.latitude,
     initialRegion.longitude,
@@ -103,42 +104,42 @@ const updateLocationScreen = () => {
     areaLocality,
   ]);
 
-
   const putUpdateLocation = async () => {
     setIsLoading(true);
-  
+
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
-        const apiUrl = 'https://dzo.onrender.com/api/vi/shop/owner/update/shop/details'; 
-  
+        const apiUrl =
+          "https://dzo.onrender.com/api/vi/shop/owner/update/shop/details";
+
         const requestBody = {
           latitude: locationData.latitude,
           longitude: locationData.longitude,
-          address: locationData.buildingPlot + ' ' + locationData.areaLocality,
+          address: locationData.buildingPlot + " " + locationData.areaLocality,
         };
-  
+
         const response = await axios.put(apiUrl, requestBody, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
-            'Content-Type': 'application/json', 
+            "Content-Type": "application/json",
           },
         });
-  
-        console.log('PUT request successful:', response.data);
+
+        console.log("PUT request successful:", response.data);
         setIsSuccess(true);
       } else {
-        console.error('Token not found in SecureStore');
+        console.error("Token not found in SecureStore");
         setIsError(true);
       }
     } catch (error) {
       setIsError(true);
-      console.error('Error in PUT request:', error);
+      console.error("Error in PUT request:", error);
     } finally {
       setIsLoading(false);
-  
+
       setTimeout(() => {
         setIsSuccess(false);
         setIsError(false);
@@ -146,7 +147,6 @@ const updateLocationScreen = () => {
       }, 2000);
     }
   };
-  
 
   useEffect(() => {
     const fetchInitialLocation = async () => {
@@ -171,8 +171,8 @@ const updateLocationScreen = () => {
       setIsInitialRegionFetched(true);
     };
 
-    fetchInitialLocation(); 
-  }, []); 
+    fetchInitialLocation();
+  }, []);
 
   reverseGeoCodeCoords = async (latitude, longitude) => {
     try {
@@ -183,15 +183,12 @@ const updateLocationScreen = () => {
       if (results && results.length > 0) {
         const address = results[0].formatted_address;
         setDisplayAddress(address);
-
       } else {
-        console.warn('No results found for reverse geocoding.');
+        console.warn("No results found for reverse geocoding.");
       }
     } catch (error) {
-      console.error('Error in reverse geocoding:', error);
+      console.error("Error in reverse geocoding:", error);
     }
-
-    
   };
 
   let text = "Waiting..";
@@ -231,9 +228,7 @@ const updateLocationScreen = () => {
             provider={PROVIDER_GOOGLE}
             style={{ flex: 1 }}
             initialRegion={initialRegion}
-            onRegionChangeComplete ={(newRegion) => {
-              
-
+            onRegionChangeComplete={(newRegion) => {
               setInitialRegion(newRegion);
               reverseGeoCodeCoords(newRegion.latitude, newRegion.longitude);
             }}
@@ -265,7 +260,7 @@ const updateLocationScreen = () => {
             />
             <View style={{ flexDirection: "column", flexWrap: "wrap" }}>
               <Text style={{ maxWidth: screenWidth - 60, fontSize: 18 }}>
-               {displayAddress}
+                {displayAddress}
               </Text>
             </View>
           </View>
@@ -297,7 +292,7 @@ const updateLocationScreen = () => {
           />
 
           <Pressable
-          onPress={putUpdateLocation}
+            onPress={putUpdateLocation}
             style={{
               marginTop: 20,
               borderRadius: 10,
@@ -337,8 +332,7 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-  }
-
+  },
 });
 
 export default updateLocationScreen;

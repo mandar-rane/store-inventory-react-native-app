@@ -16,6 +16,7 @@ const RootLayout = () => {
         <Stack.Screen name="shopDetailsScreen" />
         <Stack.Screen name="updateShopScreen" />
         <Stack.Screen name="updateLocationScreen" />
+        <Stack.Screen name="createShopScreen" />
         
         
       </Stack>
