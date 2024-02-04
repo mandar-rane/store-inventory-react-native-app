@@ -241,7 +241,11 @@ const updateShopScreen = () => {
             Location
           </Text>
 
-          <Pressable onPress={removeSelectedImg}>
+          <Pressable onPress={() =>
+        router.push({
+          pathname: "/updateLocationScreen"
+        })
+      }>
             <EditLocation />
           </Pressable>
         </View>

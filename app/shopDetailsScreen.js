@@ -13,6 +13,7 @@ import ShopAttribute from "../components/ShopAttribute";
 import { Stack, useRouter, Link , useFocusEffect} from "expo-router";
 import MapViewComp from "../components/MapViewComp";
 
+
 const ShopDetailsScreen = () => {
   const [shopData, setShopData] = useState(null);
   const router = useRouter();

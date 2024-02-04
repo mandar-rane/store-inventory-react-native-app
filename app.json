@@ -14,12 +14,18 @@
         "origin": false
       },
       "eas": {
-        "projectId": "f2108682-3354-4216-a785-2db6abb04275"
+        "projectId": "be4cb173-492d-4fac-846c-6f953ed9fb81"
       }
     },
     "owner": "misccdr",
     "android": {
-      "package": "com.misccdr.dezdash"
+      "permissions":["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "package": "com.misccdr.dezdash",
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyArRpkPQqwY0EDi0cO4m6JAWOTzk9PY6Xk"
+        }
+      }
     }
   }
 }

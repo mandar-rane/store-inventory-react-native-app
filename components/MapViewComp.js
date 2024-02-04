@@ -1,12 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { PROVIDER_GOOGLE } from "react-native-maps";
 
 const MapViewComp = ({ shop }) => {
   const coordinates = shop.location.coordinates;
   return (
     <View>
       <MapView
+      provider={PROVIDER_GOOGLE}
         style={{width:"100%", height:200 }}
         initialRegion={{
           latitude: coordinates[1],
