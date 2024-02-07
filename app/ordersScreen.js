@@ -29,7 +29,6 @@ const OrdersScreen = () => {
   });
   const [areOrdersRecieved, setAreOrdersRecieved] = useState(false);
   const [isShopDataRecieved, setShopDataRecieved] = useState(false);
-
   const dispatch = useDispatch();
 
   const handleSetShopDetails = (item) => {
@@ -373,7 +372,7 @@ const OrdersScreen = () => {
           }}
         >
           <LottieView
-            source={require("../assets/anims/Animation - 1707254612486.json")}
+            source={require("../assets/anims/search_anim.json")}
             style={{ height: 500, width: 500, transform: [{ scale: 1.8 }] }}
             autoPlay={true}
             loop={true}

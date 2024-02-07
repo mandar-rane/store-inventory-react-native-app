@@ -18,6 +18,8 @@ import { Stack, useRouter, Link } from "expo-router";
 
 const Home = () => {
   const router = useRouter();
+  const [phoneNum, setPhoneNum] = useState("");
+  const [isPhoneNumValid, setPhoneNumValid] = useState(false);
 
   async function redirectUsingToken(key) {
     let result = await SecureStore.getItemAsync(key);
@@ -29,9 +31,6 @@ const Home = () => {
   useEffect(() => {
     redirectUsingToken("accessTkn");
   }, []);
-
-  const [phoneNum, setPhoneNum] = useState("");
-  const [isPhoneNumValid, setPhoneNumValid] = useState(false);
 
   useEffect(() => {
     const phoneNumRegex = /^\d{10}$/;
