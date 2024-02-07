@@ -1,8 +1,5 @@
 import {
-  Stack,
   useRouter,
-  Link,
-  useGlobalSearchParams,
   useFocusEffect,
 } from "expo-router";
 import {
@@ -10,6 +7,7 @@ import {
   Text,
   FlatList,
   Image,
+  Dimensions,
   StyleSheet,
   TouchableOpacity,
   Pressable,
@@ -19,12 +17,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Product from "../components/Product";
 import { ScrollView } from "react-native-gesture-handler";
+import LottieView from "lottie-react-native";
 
 const productScreen = () => {
   const router = useRouter();
-  const { token } = useGlobalSearchParams();
+  const screenHeight = Dimensions.get("window").height;
+  const screenWidth = Dimensions.get("window").width;
   const [productCategories, setProductCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [areProductsFetched, setProductsFetched] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -67,6 +68,7 @@ const productScreen = () => {
             ),
           ];
           setProductCategories(uniqueCategories);
+          setProductsFetched(true);
           setProducts(organizedProducts);
         } else {
           console.error("Failed to fetch products");
@@ -142,7 +144,7 @@ const productScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ padding: 10 }}>
+      {areProductsFetched?(<ScrollView style={{ padding: 10 }}>
         <View
           style={{
             marginBottom: 10,
@@ -162,6 +164,9 @@ const productScreen = () => {
           </Text>
         </View>
 
+       
+
+       
         <View
           style={{
             flexDirection: "row",
@@ -240,7 +245,32 @@ const productScreen = () => {
           />
         ))}
         <View style={{ height: 80 }} />
-      </ScrollView>
+      </ScrollView>):(<View
+          style={{
+            flexDirection: "column",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: screenWidth,
+            height: screenHeight - 150,
+          }}
+        >
+          <LottieView
+            source={require("../assets/anims/search_anim.json")}
+            style={{
+              marginStart:5,
+              width: screenWidth,
+
+              transform: [{ scale: 1.8 }],
+            }}
+            autoPlay={true}
+            loop={true}
+            speed={1}
+          />
+
+          <Text>Fetching Products...</Text>
+        </View>)}
+      
       <TouchableOpacity
         style={styles.floatingButton}
         onPress={() =>

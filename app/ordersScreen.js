@@ -14,7 +14,7 @@ import { useRouter } from "expo-router";
 import { useDispatch } from "react-redux";
 // import { setShopDetails } from "../redux/actions/shopActions";
 import Order from "../components/Order";
-// import LottieView from "lottie-react-native";
+
 import * as SecureStore from "expo-secure-store";
 import LottieView from "lottie-react-native";
 
@@ -146,10 +146,6 @@ const OrdersScreen = () => {
       data: ordersByStatus[status],
     }));
 
-  // if (!orders) {
-  //   return <Text>LOL</Text>;
-  // }
-
   return (
     <ScrollView style={{ flexDirection: "column", backgroundColor: "white" }}>
       <View
@@ -203,7 +199,7 @@ const OrdersScreen = () => {
         </View>
       </View>
 
-      {!areOrdersRecieved && !isShopDataRecieved ? (
+      {areOrdersRecieved && isShopDataRecieved ? (
         <View>
           <View
             style={{
@@ -369,19 +365,24 @@ const OrdersScreen = () => {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
+            width: screenWidth,
+            height: screenHeight - 150,
           }}
         >
           <LottieView
             source={require("../assets/anims/search_anim.json")}
             style={{
-              height: 500,
-              width: { screenWidth },
+              marginStart:5,
+              width: screenWidth,
+
               transform: [{ scale: 1.8 }],
             }}
             autoPlay={true}
             loop={true}
             speed={1}
           />
+
+          <Text>Fetching Orders...</Text>
         </View>
       )}
 

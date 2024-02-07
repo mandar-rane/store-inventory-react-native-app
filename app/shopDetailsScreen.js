@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
   Pressable,
 } from "react-native";
 import axios from "axios";
@@ -13,11 +14,16 @@ import ShopAttribute from "../components/ShopAttribute";
 import { Stack, useRouter, Link, useFocusEffect } from "expo-router";
 import MapViewComp from "../components/MapViewComp";
 import * as SecureStore from "expo-secure-store";
+import LottieView from "lottie-react-native";
 
 const ShopDetailsScreen = () => {
   const [shopData, setShopData] = useState(null);
   const router = useRouter();
+  const screenHeight = Dimensions.get("window").height;
+  const screenWidth = Dimensions.get("window").width;
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isShopDataFetched, setShopDataFetched] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       console.log("resumed");
@@ -51,6 +57,7 @@ const ShopDetailsScreen = () => {
         });
 
         setShopData(response.data.shop);
+        setShopDataFetched(true);
         console.log(response.data.shop);
       } else {
         console.error("Token not found in SecureStore");
@@ -64,13 +71,7 @@ const ShopDetailsScreen = () => {
     fetchShopDetails();
   }, []);
 
-  if (!shopData) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
+  
 
   return (
     <ScrollView style={{ flexDirection: "column", padding: 10 }}>
@@ -84,7 +85,7 @@ const ShopDetailsScreen = () => {
         <Text style={{ fontSize: 22, fontWeight: "bold" }}>Your Shop</Text>
       </View>
 
-      <View
+      {isShopDataFetched?(<View><View
         style={{
           width: "100%",
           alignItems: "center",
@@ -326,7 +327,33 @@ const ShopDetailsScreen = () => {
           <MapViewComp shop={shopData} />
         </View>
       </View>
-      <View style={{ height: 40 }} />
+      <View style={{ height: 40 }} /></View>):(<View
+          style={{
+            flexDirection: "column",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            width: screenWidth,
+            height: screenHeight - 150,
+          }}
+        >
+          <LottieView
+            source={require("../assets/anims/search_anim.json")}
+            style={{
+              marginStart:5,
+              width: screenWidth,
+
+              transform: [{ scale: 1.8 }],
+            }}
+            autoPlay={true}
+            loop={true}
+            speed={1}
+          />
+
+          <Text>Fetching Shop Details...</Text>
+        </View>)}
+
+      
     </ScrollView>
   );
 };
