@@ -21,14 +21,15 @@ import LottieView from "lottie-react-native";
 const OrdersScreen = () => {
   const router = useRouter();
   const screenHeight = Dimensions.get("window").height;
+  const screenWidth = Dimensions.get("window").width;
   const [orders, setOrders] = useState([]);
+  const [areOrdersRecieved, setAreOrdersRecieved] = useState(false);
+  const [isShopDataRecieved, setShopDataRecieved] = useState(false);
   const [shopData, setShopData] = useState({
     name: "",
     image: { url: "", key: "" },
     shopOwner: { name: "" },
   });
-  const [areOrdersRecieved, setAreOrdersRecieved] = useState(false);
-  const [isShopDataRecieved, setShopDataRecieved] = useState(false);
   const dispatch = useDispatch();
 
   const handleSetShopDetails = (item) => {
@@ -366,14 +367,17 @@ const OrdersScreen = () => {
           style={{
             flexDirection: "column",
             flex: 1,
-            height: { screenHeight },
             alignItems: "center",
             justifyContent: "center",
           }}
         >
           <LottieView
             source={require("../assets/anims/search_anim.json")}
-            style={{ height: 500, width: 500, transform: [{ scale: 1.8 }] }}
+            style={{
+              height: 500,
+              width: { screenWidth },
+              transform: [{ scale: 1.8 }],
+            }}
             autoPlay={true}
             loop={true}
             speed={1}
