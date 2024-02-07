@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useCallback} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import ShopAttribute from "../components/ShopAttribute";
-import { Stack, useRouter, Link , useFocusEffect} from "expo-router";
+import { Stack, useRouter, Link, useFocusEffect } from "expo-router";
 import MapViewComp from "../components/MapViewComp";
 import * as SecureStore from "expo-secure-store";
 
@@ -33,25 +33,23 @@ const ShopDetailsScreen = () => {
     setIsExpanded(!isExpanded);
   };
 
- 
-
   // const shopFromStore = useSelector((state) => state.shopReducer);
 
-  const fetchShopDetails = async () =>{
+  const fetchShopDetails = async () => {
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const shopDetailsApiEndpoint =
           "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
-  
+
         const response = await axios.get(shopDetailsApiEndpoint, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
         });
-  
+
         setShopData(response.data.shop);
         console.log(response.data.shop);
       } else {
@@ -60,7 +58,7 @@ const ShopDetailsScreen = () => {
     } catch (error) {
       console.error("Error retrieving token from SecureStore:", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchShopDetails();
@@ -76,7 +74,9 @@ const ShopDetailsScreen = () => {
 
   return (
     <ScrollView style={{ flexDirection: "column", padding: 10 }}>
-      <View style={{ marginBottom: 20, flexDirection: "row", alignItems:"center" }}>
+      <View
+        style={{ marginBottom: 20, flexDirection: "row", alignItems: "center" }}
+      >
         <Image
           style={{ marginEnd: 10 }}
           source={require("../assets/images/back_icon.png")}

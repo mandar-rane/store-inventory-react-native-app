@@ -19,7 +19,7 @@ import RemoveImg from "../components/RemoveImg";
 import CustomModal from "../components/CustomModal";
 import EditLocation from "../components/EditLocation";
 import MapViewComp from "../components/MapViewComp";
-import * as SecureStore from 'expo-secure-store'; 
+import * as SecureStore from "expo-secure-store";
 
 const updateShopScreen = () => {
   const router = useRouter();
@@ -30,7 +30,7 @@ const updateShopScreen = () => {
     name: "",
     shopType: "",
     image: { key: "", url: "" },
-    location: {coordinates:[]}
+    location: { coordinates: [] },
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
@@ -45,21 +45,21 @@ const updateShopScreen = () => {
   const fetchShopDetails = async () => {
     setIsLoading(true);
     setIsImageUploaded(false);
-  
+
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const shopDetailsApiEndpoint =
           "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
-  
+
         const response = await axios.get(shopDetailsApiEndpoint, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
         });
-  
+
         if (response.data.success) {
           setIsLoading(false);
           setEditedShop(response.data.shop);
@@ -96,14 +96,14 @@ const updateShopScreen = () => {
 
   const handleUpdateShop = async () => {
     setIsLoading(true);
-  
+
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const putFormData = new FormData();
-  
+
         if (newImageUrl !== "") {
           putFormData.append("image", {
             uri: newImageUrl,
@@ -111,20 +111,20 @@ const updateShopScreen = () => {
             name: "image.jpg",
           });
         }
-  
+
         putFormData.append("name", editedShop.name);
         putFormData.append("shopType", editedShop.shopType);
-  
+
         const updateShopApiEndpoint =
           "https://dzo.onrender.com/api/vi/shop/owner/update/shop/details";
-  
+
         const response = await axios.put(updateShopApiEndpoint, putFormData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${bearerToken}`,
           },
         });
-  
+
         if (response.data.success) {
           setIsSuccess(true);
           console.log("Shop updated successfully");
@@ -142,7 +142,7 @@ const updateShopScreen = () => {
       console.error("Error updating shop:", error);
     } finally {
       setIsLoading(false);
-  
+
       setTimeout(() => {
         setIsSuccess(false);
         setIsError(false);
@@ -172,7 +172,14 @@ const updateShopScreen = () => {
 
   return (
     <ScrollView style={{ flex: 1 }}>
-      <View style={{ marginBottom: 20, flexDirection: "row", margin:10, alignItems:"center"  }}>
+      <View
+        style={{
+          marginBottom: 20,
+          flexDirection: "row",
+          margin: 10,
+          alignItems: "center",
+        }}
+      >
         <Image
           style={{ marginEnd: 10 }}
           source={require("../assets/images/back_icon.png")}
@@ -251,7 +258,7 @@ const updateShopScreen = () => {
         </View>
 
         <View style={{ flex: 1 }}>
-        <Text
+          <Text
             style={{
               fontSize: 16,
               fontWeight: "bold",
@@ -262,11 +269,13 @@ const updateShopScreen = () => {
             Location
           </Text>
 
-          <Pressable onPress={() =>
-        router.push({
-          pathname: "/updateLocationScreen"
-        })
-      }>
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: "/updateLocationScreen",
+              })
+            }
+          >
             <EditLocation />
           </Pressable>
         </View>
@@ -287,7 +296,6 @@ const updateShopScreen = () => {
         onPress={handleUpdateShop}
         disabled={!isFormValid}
       >
-
         <Text style={{ color: "white", fontSize: 18 }}>Update Shop</Text>
       </TouchableOpacity>
       <View style={{ height: 20 }} />

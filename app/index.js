@@ -27,8 +27,8 @@ const Home = () => {
   }
 
   useEffect(() => {
-    redirectUsingToken("accessTkn")
-  },[])
+    redirectUsingToken("accessTkn");
+  }, []);
 
   const [phoneNum, setPhoneNum] = useState("");
   const [isPhoneNumValid, setPhoneNumValid] = useState(false);
@@ -44,7 +44,10 @@ const Home = () => {
 
   const handleLogin = () => {
     if (isPhoneNumValid) {
-      router.replace({ pathname: "/otpScreen", params: { phoneNum: phoneNum } });
+      router.replace({
+        pathname: "/otpScreen",
+        params: { phoneNum: phoneNum },
+      });
     } else {
       if (Platform.OS == "android") {
         ToastAndroid.show("Enter Correct Number", ToastAndroid.SHORT);
@@ -171,11 +174,13 @@ const Home = () => {
               borderColor: "#bdbdbd",
               height: 46,
               borderWidth: 1,
-             
-              paddingStart:12
+
+              paddingStart: 12,
             }}
           >
-            <Text style={{ fontSize: 15, fontWeight: "bold", marginEnd:6 }}>+91</Text>
+            <Text style={{ fontSize: 15, fontWeight: "bold", marginEnd: 6 }}>
+              +91
+            </Text>
 
             <TextInput
               placeholder="Enter Phone Number"

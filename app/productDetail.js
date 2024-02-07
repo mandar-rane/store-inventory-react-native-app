@@ -17,7 +17,7 @@ import * as ImagePicker from "expo-image-picker";
 import ImgUpload from "../components/ImgUpload";
 import RemoveImg from "../components/RemoveImg";
 import CustomModal from "../components/CustomModal";
-import * as SecureStore from 'expo-secure-store'; 
+import * as SecureStore from "expo-secure-store";
 
 const productDetail = () => {
   const router = useRouter();
@@ -63,20 +63,20 @@ const productDetail = () => {
   const fetchProductDetails = async () => {
     setIsLoading(true);
     setIsImageUploaded(false);
-  
+
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const productDetailsApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/product/${productId}`;
-  
+
         const response = await axios.get(productDetailsApiEndpoint, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
         });
-  
+
         if (response.data.success) {
           setIsLoading(false);
           setEditedProduct(response.data.product);
@@ -114,20 +114,20 @@ const productDetail = () => {
   const handleDeleteProduct = async () => {
     console.log("to delete", editedProduct._id);
     setIsLoading(true);
-  
+
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const deleteProductApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/delete/product/${editedProduct._id}`;
-  
+
         const response = await axios.delete(deleteProductApiEndpoint, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
         });
-  
+
         console.log(response.data);
         setIsSuccess(true);
       } else {
@@ -149,14 +149,14 @@ const productDetail = () => {
 
   const handleUpdateProduct = async () => {
     setIsLoading(true);
-  
+
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const putFormData = new FormData();
-  
+
         if (newImageUrl !== "") {
           putFormData.append("image", {
             uri: newImageUrl,
@@ -164,23 +164,30 @@ const productDetail = () => {
             name: "image.jpg",
           });
         }
-  
+
         putFormData.append("name", editedProduct.name);
         putFormData.append("price", editedProduct.price);
         putFormData.append("category", editedProduct.category);
         putFormData.append("description", editedProduct.description);
         putFormData.append("vegnonveg", editedProduct.vegnonveg);
-        putFormData.append("stock", isNaN(editedProduct.stock) ? 0 : editedProduct.stock);
-  
+        putFormData.append(
+          "stock",
+          isNaN(editedProduct.stock) ? 0 : editedProduct.stock
+        );
+
         const updateProductApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/update/product/${productId}`;
-  
-        const response = await axios.put(updateProductApiEndpoint, putFormData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-  
+
+        const response = await axios.put(
+          updateProductApiEndpoint,
+          putFormData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          }
+        );
+
         if (response.data.success) {
           setIsSuccess(true);
           console.log("Product updated successfully");
@@ -197,7 +204,7 @@ const productDetail = () => {
       console.error("Error updating product:", error);
     } finally {
       setIsLoading(false);
-  
+
       setTimeout(() => {
         setIsSuccess(false);
         setIsError(false);
@@ -456,8 +463,8 @@ const productDetail = () => {
           height: 40,
           justifyContent: "center",
           marginHorizontal: 10,
-          borderWidth:1,
-          borderColor:"#8D272B"
+          borderWidth: 1,
+          borderColor: "#8D272B",
         }}
         onPress={handleDeleteProduct}
         disabled={!isFormValid}
@@ -477,11 +484,7 @@ const productDetail = () => {
         type="success"
         msg="Completed successfully"
       />
-      <CustomModal
-        visible={isError}
-        type="error"
-        msg="Failed to complete"
-      />
+      <CustomModal visible={isError} type="error" msg="Failed to complete" />
     </ScrollView>
   );
 };

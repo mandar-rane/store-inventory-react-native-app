@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Product from "../components/Product";
@@ -48,21 +48,23 @@ const productScreen = () => {
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const productsApiEndpoint =
           "https://dzo.onrender.com/api/vi/shop/owner/shop/products/all";
-  
+
         const response = await axios.get(productsApiEndpoint, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
         });
-  
+
         if (response.data.success) {
           const organizedProducts = organizeProdByCtg(response.data.products);
           const uniqueCategories = [
-            ...new Set(response.data.products.map((product) => product.category)),
+            ...new Set(
+              response.data.products.map((product) => product.category)
+            ),
           ];
           setProductCategories(uniqueCategories);
           setProducts(organizedProducts);

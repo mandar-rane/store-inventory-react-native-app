@@ -18,7 +18,7 @@ import RemoveImg from "../components/RemoveImg";
 import axios from "axios";
 import CustomModal from "../components/CustomModal";
 import { router } from "expo-router";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 const addProductScreen = () => {
   const [productData, setProductData] = useState({
@@ -131,14 +131,14 @@ const addProductScreen = () => {
 
   const handleCreateProduct = async () => {
     setIsLoading(true);
-  
+
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const postFormData = new FormData();
-  
+
         postFormData.append("name", productData.name);
         postFormData.append("price", productData.price);
         postFormData.append("category", productData.category);
@@ -150,23 +150,27 @@ const addProductScreen = () => {
           type: "image/jpeg",
           name: "image.jpg",
         });
-  
+
         postFormData.append(
-          'productCustomisations',
+          "productCustomisations",
           JSON.stringify(customizations),
-          { contentType: 'application/json' }
+          { contentType: "application/json" }
         );
-  
+
         const createProductApiEndpoint =
           "https://dzo.onrender.com/api/vi/shop/owner/shop/new/product";
-  
-        const response = await axios.post(createProductApiEndpoint, postFormData, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
-  
+
+        const response = await axios.post(
+          createProductApiEndpoint,
+          postFormData,
+          {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
         setIsSuccess(true);
         console.log("Product created successfully!", response);
       } else {
@@ -178,7 +182,7 @@ const addProductScreen = () => {
       console.error("Error creating product:", error);
     } finally {
       setIsLoading(false);
-  
+
       setTimeout(() => {
         setIsSuccess(false);
         setIsError(false);
@@ -458,7 +462,7 @@ const addProductScreen = () => {
                   }}
                 />
                 <View>
-                  <Text style={{ marginHorizontal:8, textAlign: "center" }}>
+                  <Text style={{ marginHorizontal: 8, textAlign: "center" }}>
                     Options
                   </Text>
                 </View>

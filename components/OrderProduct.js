@@ -6,14 +6,17 @@ const OrderProduct = ({ url, name, qty, price, customizations }) => {
     <View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <View>
-          <View
-            style={{
-              
-            
-              
-            }}
-          >
-            <Image source={{ uri: url }} style={{ width: 60, height: 60, borderRadius: 10, borderColor:'black', borderWidth:0 }} />
+          <View style={{}}>
+            <Image
+              source={{ uri: url }}
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 10,
+                borderColor: "black",
+                borderWidth: 0,
+              }}
+            />
           </View>
         </View>
         <View

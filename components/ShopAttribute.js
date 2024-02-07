@@ -34,12 +34,12 @@ const ShopAttribute = ({ attribute, attributeValue }) => {
     <View
       style={{
         flexDirection: "column",
-        
+
         width: 150,
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 20,
-        padding:16,
+        padding: 16,
         backgroundColor: "#ffffff",
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
@@ -50,12 +50,10 @@ const ShopAttribute = ({ attribute, attributeValue }) => {
     >
       <Image
         source={attributeIconMapping(attribute)}
-        style={{ height: 30, width: 30, resizeMode: "cover" , marginBottom:4}}
+        style={{ height: 30, width: 30, resizeMode: "cover", marginBottom: 4 }}
       />
 
-      
-
-      <Text numberOfLines={1} style={{ fontSize: 18 ,fontWeight: "bold"}}>
+      <Text numberOfLines={1} style={{ fontSize: 18, fontWeight: "bold" }}>
         {attributeValue}
         {trailTextMapping(attribute)}
       </Text>

@@ -14,7 +14,6 @@ import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
 
-
 async function saveToken(key, value) {
   await SecureStore.setItemAsync(key, value);
 }
@@ -27,18 +26,16 @@ const otpScreen = () => {
   const [timer, setTimer] = useState(60);
   const [isOtpValid, setOtpValid] = useState(false);
 
-  useEffect(() =>{
+  useEffect(() => {
     const otpRegex = /^\d{6}$/;
-    if(otpRegex.test(receivedOtp)){
+    if (otpRegex.test(receivedOtp)) {
       setOtpValid(true);
-    }else{
+    } else {
       setOtpValid(false);
     }
-
-  }, [receivedOtp])
+  }, [receivedOtp]);
 
   const handleOtpSubmit = async () => {
-    
     if (isOtpValid) {
       try {
         const otpApiUrl =
@@ -183,13 +180,12 @@ const otpScreen = () => {
           <View
             style={{
               flex: 4,
-              height:46,
-              paddingLeft:10,
-              justifyContent:"center",
+              height: 46,
+              paddingLeft: 10,
+              justifyContent: "center",
               borderRadius: 8,
               borderColor: "gray",
               borderWidth: 1,
-              
             }}
           >
             <TextInput
@@ -207,12 +203,12 @@ const otpScreen = () => {
         </View>
 
         <Pressable
-        android_ripple={{ color: "#ffffff" }}
-        disabled={isOtpValid?false:true}
+          android_ripple={{ color: "#ffffff" }}
+          disabled={isOtpValid ? false : true}
           style={{
-            backgroundColor: isOtpValid?"black":"#999999",
+            backgroundColor: isOtpValid ? "black" : "#999999",
             borderRadius: 10,
-            height:46,
+            height: 46,
             justifyContent: "center",
             alignItems: "center",
             marginBottom: 6,
@@ -229,7 +225,7 @@ const otpScreen = () => {
           </Text>
         </Pressable>
         <Pressable
-        android_ripple={{ color: "#999999" }}
+          android_ripple={{ color: "#999999" }}
           style={{
             backgroundColor: isButtonDisabled ? "#e0e0e0" : "white",
             borderRadius: 10,

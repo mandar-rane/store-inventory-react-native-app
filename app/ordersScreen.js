@@ -7,24 +7,29 @@ import {
   Image,
   SectionList,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import axios from "axios";
-import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
+import { useRouter } from "expo-router";
 import { useDispatch } from "react-redux";
-import { setShopDetails } from "../redux/actions/shopActions";
+// import { setShopDetails } from "../redux/actions/shopActions";
 import Order from "../components/Order";
+// import LottieView from "lottie-react-native";
 import * as SecureStore from "expo-secure-store";
-
+import LottieView from "lottie-react-native";
 
 const OrdersScreen = () => {
   const router = useRouter();
+  const screenHeight = Dimensions.get("window").height;
   const [orders, setOrders] = useState([]);
   const [shopData, setShopData] = useState({
     name: "",
     image: { url: "", key: "" },
     shopOwner: { name: "" },
   });
-  
+  const [areOrdersRecieved, setAreOrdersRecieved] = useState(false);
+  const [isShopDataRecieved, setShopDataRecieved] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleSetShopDetails = (item) => {
@@ -34,7 +39,7 @@ const OrdersScreen = () => {
 
   const fetchShopDetails = async () => {
     try {
-      const key = "accessTkn"; 
+      const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
 
       if (bearerToken) {
@@ -48,6 +53,7 @@ const OrdersScreen = () => {
             },
           })
           .then((response) => {
+            setShopDataRecieved(true);
             handleSetShopDetails(response.data.shop);
             console.log(response.data.shop);
           })
@@ -64,7 +70,7 @@ const OrdersScreen = () => {
 
   const fetchAllOrders = async () => {
     try {
-      const key = "accessTkn"; // replace with your actual key
+      const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
 
       if (bearerToken) {
@@ -78,6 +84,7 @@ const OrdersScreen = () => {
             },
           })
           .then((response) => {
+            setAreOrdersRecieved(true);
             setOrders(response.data.orders);
           })
           .catch((error) => {
@@ -139,20 +146,18 @@ const OrdersScreen = () => {
       data: ordersByStatus[status],
     }));
 
-  if (!orders) {
-    return <Text>LOL</Text>;
-  }
+  // if (!orders) {
+  //   return <Text>LOL</Text>;
+  // }
 
   return (
-    <ScrollView
-      style={{ flexDirection: "column", backgroundColor: "white" }}
-    >
+    <ScrollView style={{ flexDirection: "column", backgroundColor: "white" }}>
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
           flex: 1,
-          marginTop:10,
+          marginTop: 10,
           marginBottom: 10,
         }}
       >
@@ -183,166 +188,199 @@ const OrdersScreen = () => {
         </View>
 
         <View style={{ flex: 1, alignItems: "flex-end" }}>
-          <Pressable  onPress={() =>
-        router.push({
-          pathname: "/createShopScreen",
-     
-        })
-      }>
-
-          <Image 
-            style={{ width: 30, height: 30, resizeMode: "contain" }}
-            source={require("dezdash/assets/images/user_icon.png")}
-          />
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: "/createShopScreen",
+              })
+            }
+          >
+            <Image
+              style={{ width: 30, height: 30, resizeMode: "contain" }}
+              source={require("dezdash/assets/images/user_icon.png")}
+            />
           </Pressable>
-          
         </View>
       </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          backgroundColor: "#c8f1ec",
-          alignItems: "center",
-          padding:10,
-          marginBottom:10
-        }}
-      >
-        <Image
-          style={{ width: 75, height: 75, resizeMode: "cover", borderRadius:50, marginEnd:10 }}
-          source={{uri:shopData.image.url}}
-        />
-        <View style={{ flexDirection: "column" }}>
-          <Text style={{fontSize:20, fontWeight:"bold"}}>{shopData.name}</Text>
-          <Text>Welcome {shopData.shopOwner.name}</Text>
-          
-        </View>
-      </View>
-
-      <View
-        style={{ flexDirection: "row", flex: 1, marginBottom: 30, height: 100 }}
-      >
-        <Pressable
-          onPress={() =>
-            router.push({
-              pathname: "/shopDetailsScreen",
-            })
-          }
-          style={{
-            margin: 10,
-            justifyContent: "center",
-            height: 100,
-            width: 100,
-
-            flexDirection: "column",
-            flex: 1,
-            alignItems: "center",
-            borderColor: "#bdbdbd",
-            borderWidth: 1,
-            borderRadius: 25,
-          }}
-        >
-          <Image
-            source={require("dezdash/assets/images/shop_icon_colored.png")}
-            style={{ height: 50, width: 50, marginBottom: 10 }}
-          />
-          <Text style={{ fontWeight: "bold" }}>Manage Shop</Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() =>
-            router.push({
-              pathname: "/productScreen",
-            })
-          }
-          style={{
-            margin: 10,
-            justifyContent: "center",
-            height: 100,
-            flexDirection: "column",
-            flex: 1,
-            alignItems: "center",
-            backgroundColor: "#ffffff",
-            borderRadius: 25,
-            borderColor: "#bdbdbd",
-            borderWidth: 1,
-          }}
-        >
-          <Image
-            source={require("dezdash/assets/images/shop_cart_icon.png")}
-            style={{ height: 50, width: 50, marginBottom: 10 }}
-          />
-          <Text style={{ fontWeight: "bold" }}>Manage Products</Text>
-        </Pressable>
-      </View>
-
-      <View
-        style={{
-          marginTop: 16,
-          flexDirection: "row",
-          alignItems: "center",
-          marginBottom: 10,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            height: 1,
-            backgroundColor: "#abb7b7",
-            marginHorizontal: 5,
-          }}
-        />
+      {!areOrdersRecieved && !isShopDataRecieved ? (
         <View>
-          <Text
+          <View
             style={{
-              marginHorizontal: 16,
-
-              fontSize: 24,
-              fontWeight: "bold",
+              flexDirection: "row",
+              backgroundColor: "#c8f1ec",
+              alignItems: "center",
+              padding: 10,
+              marginBottom: 10,
             }}
           >
-            My Orders
-          </Text>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            height: 1,
-            backgroundColor: "#abb7b7",
-            marginHorizontal: 5,
-          }}
-        />
-      </View>
-
-      <View
-        style={{
-          flexDirection: "column",
-          marginTop: 5,
-          margin:10,
-          borderRadius: 25,
-          borderColor: "#bdbdbd",
-          borderWidth: 1,
-        }}
-      >
-        <SectionList
-          sections={sections}
-          keyExtractor={(item) => item._id}
-          renderItem={renderOrderItem}
-          renderSectionHeader={({ section: { title } }) => (
-            <View
+            <Image
               style={{
-                width: "100%",
+                width: 75,
+                height: 75,
+                resizeMode: "cover",
+                borderRadius: 50,
+                marginEnd: 10,
+              }}
+              source={{ uri: shopData.image.url }}
+            />
+            <View style={{ flexDirection: "column" }}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {shopData.name}
+              </Text>
+              <Text>Welcome {shopData.shopOwner.name}</Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              flex: 1,
+              marginBottom: 30,
+              height: 100,
+            }}
+          >
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: "/shopDetailsScreen",
+                })
+              }
+              style={{
+                margin: 10,
+                justifyContent: "center",
+                height: 100,
+                width: 100,
+
+                flexDirection: "column",
+                flex: 1,
                 alignItems: "center",
-                marginVertical: 10,
+                borderColor: "#bdbdbd",
+                borderWidth: 1,
+                borderRadius: 25,
               }}
             >
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {title} ORDERS
+              <Image
+                source={require("dezdash/assets/images/shop_icon_colored.png")}
+                style={{ height: 50, width: 50, marginBottom: 10 }}
+              />
+              <Text style={{ fontWeight: "bold" }}>Manage Shop</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: "/productScreen",
+                })
+              }
+              style={{
+                margin: 10,
+                justifyContent: "center",
+                height: 100,
+                flexDirection: "column",
+                flex: 1,
+                alignItems: "center",
+                backgroundColor: "#ffffff",
+                borderRadius: 25,
+                borderColor: "#bdbdbd",
+                borderWidth: 1,
+              }}
+            >
+              <Image
+                source={require("dezdash/assets/images/shop_cart_icon.png")}
+                style={{ height: 50, width: 50, marginBottom: 10 }}
+              />
+              <Text style={{ fontWeight: "bold" }}>Manage Products</Text>
+            </Pressable>
+          </View>
+
+          <View
+            style={{
+              marginTop: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                height: 1,
+                backgroundColor: "#abb7b7",
+                marginHorizontal: 5,
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  marginHorizontal: 16,
+
+                  fontSize: 24,
+                  fontWeight: "bold",
+                }}
+              >
+                My Orders
               </Text>
             </View>
-          )}
-        />
-      </View>
+            <View
+              style={{
+                flex: 1,
+                height: 1,
+                backgroundColor: "#abb7b7",
+                marginHorizontal: 5,
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              flexDirection: "column",
+              marginTop: 5,
+              margin: 10,
+              borderRadius: 25,
+              borderColor: "#bdbdbd",
+              borderWidth: 1,
+            }}
+          >
+            <SectionList
+              sections={sections}
+              keyExtractor={(item) => item._id}
+              renderItem={renderOrderItem}
+              renderSectionHeader={({ section: { title } }) => (
+                <View
+                  style={{
+                    width: "100%",
+                    alignItems: "center",
+                    marginVertical: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                    {title} ORDERS
+                  </Text>
+                </View>
+              )}
+            />
+          </View>
+        </View>
+      ) : (
+        <View
+          style={{
+            flexDirection: "column",
+            flex: 1,
+            height: { screenHeight },
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <LottieView
+            source={require("../assets/anims/Animation - 1707254612486.json")}
+            style={{ height: 500, width: 500, transform: [{ scale: 1.8 }] }}
+            autoPlay={true}
+            loop={true}
+            speed={1}
+          />
+        </View>
+      )}
 
       <View style={{ height: 20 }} />
     </ScrollView>

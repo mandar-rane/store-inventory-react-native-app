@@ -5,7 +5,7 @@ import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import OrderMetadata from "../components/OrderMetadata";
 import OrderProduct from "../components/OrderProduct";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 const orderDetails = () => {
   const router = useRouter();
@@ -17,16 +17,16 @@ const orderDetails = () => {
     try {
       const key = "accessTkn";
       const bearerToken = await SecureStore.getItemAsync(key);
-  
+
       if (bearerToken) {
         const orderDetailsApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/order/${orderId}`;
-  
+
         const response = await axios.get(orderDetailsApiEndpoint, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
         });
-  
+
         console.log(response.data.order);
         setOrderDetails(response.data.order);
       } else {
@@ -36,7 +36,7 @@ const orderDetails = () => {
       console.error("Error fetching order details:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchOrderDetails();
   }, []);
@@ -49,7 +49,7 @@ const orderDetails = () => {
   }
 
   return (
-    <ScrollView style={{ padding: 10, backgroundColor: "#f6f8fc"}}>
+    <ScrollView style={{ padding: 10, backgroundColor: "#f6f8fc" }}>
       <View>
         <View
           style={{
@@ -90,7 +90,7 @@ const orderDetails = () => {
             </View>
           </View>
         </View>
-        
+
         <View
           style={{
             marginTop: 30,
@@ -135,11 +135,8 @@ const orderDetails = () => {
         </View>
       </View>
 
-      
-
       <View
         style={{
-          
           backgroundColor: "#ffffff",
           alignSelf: "baseline",
           width: "100%",
@@ -148,16 +145,12 @@ const orderDetails = () => {
           borderColor: "#bdbdbd",
           borderWidth: 1,
           shadowColor: "#000",
-
-    
         }}
       >
         <View style={{ flexDirection: "row", marginBottom: 2 }}>
           <Text style={{ marginEnd: 5 }}>Order#</Text>
           <Text>{orderDetails._id}</Text>
         </View>
-
-        
 
         <View style={{ padding: 5 }}>
           <FlatList
@@ -181,7 +174,7 @@ const orderDetails = () => {
           />
         </View>
       </View>
-      <View style={{height:20}}/>
+      <View style={{ height: 20 }} />
 
       <View
         style={{
@@ -189,8 +182,7 @@ const orderDetails = () => {
           marginBottom: 20,
           borderRadius: 10,
           borderColor: "#bdbdbd",
-          borderWidth: 1
-          
+          borderWidth: 1,
         }}
       >
         <OrderMetadata
@@ -202,9 +194,6 @@ const orderDetails = () => {
           orderDate={orderDetails.createdAtDate}
         />
       </View>
-
-      
-    
     </ScrollView>
   );
 };

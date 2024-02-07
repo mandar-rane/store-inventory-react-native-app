@@ -43,7 +43,7 @@ const Product = ({
       return <Text style={{ color: "red" }}>Out of Stock</Text>;
     } else if (stock !== 0 && !isNaN(stock)) {
       return <Text style={{ color: "green" }}>In Stock: {stock}</Text>;
-    }else{
+    } else {
       return <Text style={{ color: "red" }}>Out of Stock</Text>;
     }
   };

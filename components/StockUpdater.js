@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-const StockUpdater = ({onCountChange}) => {
+const StockUpdater = ({ onCountChange }) => {
   const [stock, setStock] = useState(0);
 
   const incrementStock = () => {
@@ -12,7 +12,7 @@ const StockUpdater = ({onCountChange}) => {
   const decrementStock = () => {
     if (stock > 0) {
       setStock(stock - 1);
-      onCountChange(stock-1);
+      onCountChange(stock - 1);
     }
   };
 
@@ -35,21 +35,21 @@ const StockUpdater = ({onCountChange}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   button: {
-    display:"flex",
-    backgroundColor: '#3498db',
+    display: "flex",
+    backgroundColor: "#3498db",
     padding: 10,
     borderRadius: 5,
     marginHorizontal: 5,
-    width:45,
-    alignItems:"center",
-    justifyContent:"center"
+    width: 45,
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 20,
   },
   stockValue: {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   disabledButton: {
-    backgroundColor: '#bdc3c7', // Grey out color
+    backgroundColor: "#bdc3c7", // Grey out color
   },
 });
 
