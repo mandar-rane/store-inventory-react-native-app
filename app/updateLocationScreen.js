@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Pressable,
   KeyboardAvoidingView,
+  ToastAndroid,
   Platform,
 } from "react-native";
 import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
@@ -149,26 +150,41 @@ const updateLocationScreen = () => {
   };
 
   useEffect(() => {
+    console.log("location fetching started");
+    ToastAndroid.show("location fetching started", ToastAndroid.SHORT);
     const fetchInitialLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+      console.log("location fetched", status);
+      ToastAndroid.show("location fetched: " + status, ToastAndroid.SHORT);
+
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      const { coords } = location;
-      const { latitude, longitude } = coords;
-      setInitialRegion({
-        latitude,
-        longitude,
-        latitudeDelta: 0.00922,
-        longitudeDelta: 0.00421,
-      });
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        console.log("Location: ", location);
+        const { coords } = location;
+        const { latitude, longitude } = coords;
+        ToastAndroid.show(
+          "coords: " + latitude.toString() + " " + longitude.toString(),
+          ToastAndroid.SHORT
+        );
 
-      reverseGeoCodeCoords(latitude, longitude);
+        setInitialRegion({
+          latitude,
+          longitude,
+          latitudeDelta: 0.00922,
+          longitudeDelta: 0.00421,
+        });
 
-      setIsInitialRegionFetched(true);
+        reverseGeoCodeCoords(latitude, longitude);
+
+        setIsInitialRegionFetched(true);
+      } catch (error) {
+        console.error("Error getting location: ", error);
+      }
     };
 
     fetchInitialLocation();

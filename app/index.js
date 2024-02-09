@@ -66,7 +66,7 @@ const Home = () => {
       }}
     >
       <Image
-        source={require("dezdash/assets/images/login_banner.png")}
+        source={require("../assets/images/login_banner.png")}
         resizeMode="cover"
         style={{
           width: "100%",
@@ -91,7 +91,7 @@ const Home = () => {
           <Image
             resizeMode="contain"
             style={{ width: 40, height: 40 }}
-            source={require("dezdash/assets/images/dezdash_icon.png")}
+            source={require("../assets/images/dezdash_icon.png")}
           />
         </View>
         <Text style={{ fontStyle: "italic" }}>by Dezerto </Text>
@@ -152,7 +152,7 @@ const Home = () => {
             }}
           >
             <Image
-              source={require("dezdash/assets/images/india_flag_icon.png")} // Replace with the path to your flag image
+              source={require("../assets/images/india_flag_icon.png")} // Replace with the path to your flag image
               resizeMode="cover"
               style={{
                 width: 30,

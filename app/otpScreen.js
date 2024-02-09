@@ -128,7 +128,7 @@ const otpScreen = () => {
         Verify OTP
       </Text>
       <Image
-        source={require("dezdash/assets/images/otp_screen_image.png")}
+        source={require("../assets/images/otp_screen_image.png")}
         style={{
           width: "80%",
           height: "50%",

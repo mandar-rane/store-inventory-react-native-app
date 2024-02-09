@@ -341,9 +341,8 @@ const ShopDetailsScreen = () => {
             source={require("../assets/anims/search_anim.json")}
             style={{
               marginStart:5,
-              width: screenWidth,
-
-              transform: [{ scale: 1.8 }],
+              height:200,
+              width:200
             }}
             autoPlay={true}
             loop={true}

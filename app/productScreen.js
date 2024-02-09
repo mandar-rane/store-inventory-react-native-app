@@ -11,12 +11,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  ScrollView
 } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Product from "../components/Product";
-import { ScrollView } from "react-native-gesture-handler";
 import LottieView from "lottie-react-native";
 
 const productScreen = () => {
@@ -259,9 +259,10 @@ const productScreen = () => {
             source={require("../assets/anims/search_anim.json")}
             style={{
               marginStart:5,
-              width: screenWidth,
+              height:200,
+              width:200
 
-              transform: [{ scale: 1.8 }],
+              
             }}
             autoPlay={true}
             loop={true}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, Image, FlatList, TouchableOpacity,ScrollView } from "react-native";
 import axios from "axios";
 import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
-import { ScrollView } from "react-native-gesture-handler";
+
 import OrderMetadata from "../components/OrderMetadata";
 import OrderProduct from "../components/OrderProduct";
 import * as SecureStore from "expo-secure-store";
@@ -85,7 +85,7 @@ const orderDetails = () => {
               </Text>
               <Image
                 style={{ width: 30, height: 30, resizeMode: "contain" }}
-                source={require("dezdash/assets/images/dezdash_icon.png")}
+                source={require("../assets/images/dezdash_icon.png")}
               />
             </View>
           </View>

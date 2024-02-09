@@ -160,7 +160,7 @@ const OrdersScreen = () => {
         <View style={{ flex: 1 }}>
           {/* <Image
             style={{ width: 30, height: 30, resizeMode: "contain" }}
-            source={require("dezdash/assets/images/shop_icon.png")}
+            source={require("../assets/images/shop_icon.png")}
           /> */}
         </View>
 
@@ -179,7 +179,7 @@ const OrdersScreen = () => {
           </Text>
           <Image
             style={{ width: 25, height: 25, resizeMode: "contain" }}
-            source={require("dezdash/assets/images/dezdash_icon.png")}
+            source={require("../assets/images/dezdash_icon.png")}
           />
         </View>
 
@@ -193,7 +193,7 @@ const OrdersScreen = () => {
           >
             <Image
               style={{ width: 30, height: 30, resizeMode: "contain" }}
-              source={require("dezdash/assets/images/user_icon.png")}
+              source={require("../assets/images/user_icon.png")}
             />
           </Pressable>
         </View>
@@ -257,7 +257,7 @@ const OrdersScreen = () => {
               }}
             >
               <Image
-                source={require("dezdash/assets/images/shop_icon_colored.png")}
+                source={require("../assets/images/shop_icon_colored.png")}
                 style={{ height: 50, width: 50, marginBottom: 10 }}
               />
               <Text style={{ fontWeight: "bold" }}>Manage Shop</Text>
@@ -283,7 +283,7 @@ const OrdersScreen = () => {
               }}
             >
               <Image
-                source={require("dezdash/assets/images/shop_cart_icon.png")}
+                source={require("../assets/images/shop_cart_icon.png")}
                 style={{ height: 50, width: 50, marginBottom: 10 }}
               />
               <Text style={{ fontWeight: "bold" }}>Manage Products</Text>
@@ -373,9 +373,9 @@ const OrdersScreen = () => {
             source={require("../assets/anims/search_anim.json")}
             style={{
               marginStart:5,
-              width: screenWidth,
-
-              transform: [{ scale: 1.8 }],
+              height:200,
+              width:200
+        
             }}
             autoPlay={true}
             loop={true}

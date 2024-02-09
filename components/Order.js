@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, Pressable, Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, Pressable, Image , TouchableOpacity} from "react-native";
+
 
 const getStatusColor = (status) => {
   switch (status.toLowerCase()) {
@@ -110,7 +110,7 @@ const Order = ({
             }}
           >
             <Image
-              source={require("dezdash/assets/images/back_icon.png")}
+              source={require("../assets/images/back_icon.png")}
               style={{ width: 20, height: 20, borderRadius: 10 }}
             />
           </View>
