@@ -114,7 +114,7 @@ const ShopDetailsScreen = () => {
           }
         >
           <Text style={{ textDecorationLine: "underline" }}>
-            {" "}
+          
             Update Details
           </Text>
         </Pressable>
