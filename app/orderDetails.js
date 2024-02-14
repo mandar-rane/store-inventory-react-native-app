@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, FlatList, TouchableOpacity,ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import axios from "axios";
 import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
 
 import OrderMetadata from "../components/OrderMetadata";
 import OrderProduct from "../components/OrderProduct";
 import * as SecureStore from "expo-secure-store";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
 
 const orderDetails = () => {
   const router = useRouter();
@@ -19,7 +27,7 @@ const orderDetails = () => {
       const bearerToken = await SecureStore.getItemAsync(key);
 
       if (bearerToken) {
-        const orderDetailsApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/order/${orderId}`;
+        const orderDetailsApiEndpoint = `${DEZ_OWNER_BASE_URL}/shop/order/${orderId}`;
 
         const response = await axios.get(orderDetailsApiEndpoint, {
           headers: {

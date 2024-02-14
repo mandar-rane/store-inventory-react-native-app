@@ -6,6 +6,8 @@ import {
   Pressable,
   Image,
   SectionList,
+  Button,
+ 
   ScrollView,
   Dimensions,
 } from "react-native";
@@ -14,9 +16,11 @@ import { useRouter } from "expo-router";
 import { useDispatch } from "react-redux";
 // import { setShopDetails } from "../redux/actions/shopActions";
 import Order from "../components/Order";
-
+import { usePushNotifications } from "../utils/NotifService";
 import * as SecureStore from "expo-secure-store";
 import LottieView from "lottie-react-native";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OrdersScreen = () => {
   const router = useRouter();
@@ -31,6 +35,7 @@ const OrdersScreen = () => {
     shopOwner: { name: "" },
   });
   const dispatch = useDispatch();
+  const { expoPushToken, notification } = usePushNotifications();
 
   const handleSetShopDetails = (item) => {
     setShopData(item);
@@ -44,7 +49,7 @@ const OrdersScreen = () => {
 
       if (bearerToken) {
         const shopDetailsApiEndpoint =
-          "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
+          `${DEZ_OWNER_BASE_URL}/shop/details`;
 
         axios
           .get(shopDetailsApiEndpoint, {
@@ -75,7 +80,7 @@ const OrdersScreen = () => {
 
       if (bearerToken) {
         const fetchAllOrdersApiEndpoint =
-          "https://dzo.onrender.com/api/vi/shop/owner/shop/orders/all";
+        `${DEZ_OWNER_BASE_URL}/shop/orders/all`;;
 
         axios
           .get(fetchAllOrdersApiEndpoint, {
@@ -191,10 +196,10 @@ const OrdersScreen = () => {
               })
             }
           >
-            <Image
+            {/* <Image
               style={{ width: 30, height: 30, resizeMode: "contain" }}
               source={require("../assets/images/user_icon.png")}
-            />
+            /> */}
           </Pressable>
         </View>
       </View>
@@ -222,7 +227,7 @@ const OrdersScreen = () => {
             />
             <View style={{ flexDirection: "column" }}>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                {shopData.name}
+              {shopData.name.charAt(0).toUpperCase() + shopData.name.slice(1)}
               </Text>
               <Text>Welcome {shopData.shopOwner.name}</Text>
             </View>
@@ -366,15 +371,16 @@ const OrdersScreen = () => {
             alignItems: "center",
             justifyContent: "center",
             width: screenWidth,
-            height: screenHeight - 150,
+            height: screenHeight -100,
           }}
         >
           <LottieView
-            source={require("../assets/anims/search_anim.json")}
+            source={require("../assets/anims/orders_search_anim.json")}
             style={{
-              marginStart:5,
-              height:200,
-              width:200
+             
+              height:250,
+              width:250,
+              
         
             }}
             autoPlay={true}
@@ -382,11 +388,25 @@ const OrdersScreen = () => {
             speed={1}
           />
 
-          <Text>Fetching Orders...</Text>
+          <Text style={{fontStyle:"italic", fontSize:20}}>Fetching Orders...</Text>
         </View>
       )}
 
-      <View style={{ height: 20 }} />
+      <View style={{ height: 40 }} />
+      <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+      }}>
+      <Text>Your expo push toen: {expoPushToken}</Text>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Title: {notification && notification.request.content.title} </Text>
+        <Text>Body: {notification && notification.request.content.body}</Text>
+        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
+      </View>
+
+    </View>
     </ScrollView>
   );
 };

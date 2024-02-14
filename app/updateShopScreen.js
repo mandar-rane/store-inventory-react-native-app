@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
   Pressable,
   ToastAndroid,
 } from "react-native";
@@ -18,8 +19,9 @@ import ImgUpload from "../components/ImgUpload";
 import RemoveImg from "../components/RemoveImg";
 import CustomModal from "../components/CustomModal";
 import EditLocation from "../components/EditLocation";
-import MapViewComp from "../components/MapViewComp";
 import * as SecureStore from "expo-secure-store";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
+const screenHeight = Dimensions.get("window").height;
 
 const updateShopScreen = () => {
   const router = useRouter();
@@ -35,6 +37,7 @@ const updateShopScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [newImageUrl, setNewImageUri] = useState("");
+  
 
   useEffect(() => {
     const isValid =
@@ -51,8 +54,7 @@ const updateShopScreen = () => {
       const bearerToken = await SecureStore.getItemAsync(key);
 
       if (bearerToken) {
-        const shopDetailsApiEndpoint =
-          "https://dzo.onrender.com/api/vi/shop/owner/shop/details";
+        const shopDetailsApiEndpoint = `${DEZ_OWNER_BASE_URL}/shop/details`;
 
         const response = await axios.get(shopDetailsApiEndpoint, {
           headers: {
@@ -115,8 +117,7 @@ const updateShopScreen = () => {
         putFormData.append("name", editedShop.name);
         putFormData.append("shopType", editedShop.shopType);
 
-        const updateShopApiEndpoint =
-          "https://dzo.onrender.com/api/vi/shop/owner/update/shop/details";
+        const updateShopApiEndpoint = `${DEZ_OWNER_BASE_URL}/update/shop/details`;
 
         const response = await axios.put(updateShopApiEndpoint, putFormData, {
           headers: {
@@ -171,13 +172,15 @@ const updateShopScreen = () => {
   };
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1}}>
+      <View style={{flex:1, height:screenHeight}}>
       <View
         style={{
           marginBottom: 20,
           flexDirection: "row",
           margin: 10,
           alignItems: "center",
+          
         }}
       >
         <Image
@@ -300,9 +303,9 @@ const updateShopScreen = () => {
       </TouchableOpacity>
       <View style={{ height: 20 }} />
 
-      {/* {isLoading || isSuccess || isError ? (
+      {isLoading || isSuccess || isError ? (
         <View style={styles.overlay} />
-      ) : null} */}
+      ) : null}
 
       <CustomModal visible={isLoading} type="loading" msg="" />
       <CustomModal
@@ -311,6 +314,7 @@ const updateShopScreen = () => {
         msg="Shop updated successfully"
       />
       <CustomModal visible={isError} type="error" msg="Failed to update Shop" />
+      </View>
     </ScrollView>
   );
 };
@@ -399,6 +403,7 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+    
   },
 });
 

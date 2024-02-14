@@ -19,6 +19,7 @@ import axios from "axios";
 import CustomModal from "../components/CustomModal";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
 
 const addProductScreen = () => {
   const [productData, setProductData] = useState({
@@ -157,8 +158,7 @@ const addProductScreen = () => {
           { contentType: "application/json" }
         );
 
-        const createProductApiEndpoint =
-          "https://dzo.onrender.com/api/vi/shop/owner/shop/new/product";
+        const createProductApiEndpoint = `${DEZ_OWNER_BASE_URL}/shop/new/product`;
 
         const response = await axios.post(
           createProductApiEndpoint,
@@ -238,8 +238,8 @@ const addProductScreen = () => {
   };
 
   return (
-    <ScrollView style={{ flexDirection: "column", padding: 15, flex: 1 }}>
-      <View style={{ marginBottom: 20, flexDirection: "row" }}>
+    <ScrollView style={{ flexDirection: "column", flex: 1 }}>
+      <View style={{ marginBottom: 20, marginTop: 10, flexDirection: "row" }}>
         <Pressable onPress={router.back}>
           <Image
             style={{ marginEnd: 10 }}
@@ -305,7 +305,9 @@ const addProductScreen = () => {
           setProductData({ ...productData, description: text })
         }
       />
-      <View style={{ flexDirection: "row", marginBottom: 10 }}>
+      <View
+        style={{ flexDirection: "row", marginBottom: 10, marginHorizontal: 10 }}
+      >
         <View style={{ flex: 1 }}>
           {isImageUploaded ? (
             <Pressable onPress={removeSelectedImg}>
@@ -380,7 +382,14 @@ const addProductScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={{ alignItems: "center", fontSize: 18, marginBottom: 10 }}>
+      <Text
+        style={{
+          alignItems: "center",
+          fontSize: 18,
+          marginBottom: 10,
+          marginHorizontal: 10,
+        }}
+      >
         Customizations
       </Text>
 
@@ -477,7 +486,13 @@ const addProductScreen = () => {
 
               {renderOptions(index)}
 
-              <View style={{ flexDirection: "column", flex: 1 }}>
+              <View
+                style={{
+                  flexDirection: "column",
+                  flex: 1,
+                  marginHorizontal: 10,
+                }}
+              >
                 <TouchableOpacity
                   style={{
                     flex: 1,
@@ -521,7 +536,8 @@ const addProductScreen = () => {
             padding: 10,
             alignItems: "center",
             borderRadius: 8,
-            marginBottom: 6,
+            marginBottom: 10,
+            marginHorizontal: 10,
           }}
           onPress={addCustomization}
         >
@@ -533,6 +549,7 @@ const addProductScreen = () => {
         title="Add Product"
         onPress={handleCreateProduct}
         disabled={!isFormValid}
+        style={{ marginHorizontal: 10, backgroundColor: "#000000" }}
       />
 
       <View style={{ height: 40 }} />
@@ -565,6 +582,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,
+    marginHorizontal: 10,
   },
   inputError: {
     borderColor: "red",
@@ -577,6 +595,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,
+    marginHorizontal: 10,
   },
   warningText: {
     color: "red",
@@ -586,6 +605,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
+    marginHorizontal: 10,
   },
   vegNonVegButton: {
     flex: 1,

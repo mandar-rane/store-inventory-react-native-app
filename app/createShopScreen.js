@@ -16,8 +16,8 @@ import RemoveImg from "../components/RemoveImg";
 import * as ImagePicker from "expo-image-picker";
 import * as SecureStore from "expo-secure-store";
 import CustomModal from "../components/CustomModal";
-
-import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
+import { useRouter } from "expo-router";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
 
 const createShopPage = () => {
   const router = useRouter();
@@ -72,8 +72,7 @@ const createShopPage = () => {
           name: "image.jpg",
         });
 
-        const createShopApiEndpoint =
-          "https://dzo.onrender.com/api/vi/shop/owner/new/shop";
+        const createShopApiEndpoint = `${DEZ_OWNER_BASE_URL}/new/shop`;
 
         const response = await axios.post(createShopApiEndpoint, formData, {
           headers: {
@@ -84,19 +83,32 @@ const createShopPage = () => {
 
         console.log(response.data);
         setIsSuccess(true);
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsSuccess(false);
+          setIsError(false);
+          router.replace({ pathname: "/ordersScreen" });
+        }, 2000);
       } else {
         console.error("Token not found in SecureStore");
         setIsError(true);
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsSuccess(false);
+          setIsError(false);
+          //SHOW ERROR DIALOG
+          //...
+        }, 2000);
       }
     } catch (error) {
       setIsError(true);
       console.error(error);
-    } finally {
       setIsLoading(false);
       setTimeout(() => {
         setIsSuccess(false);
         setIsError(false);
-        router.back();
+        //SHOW ERROR DIALOG
+        //...
       }, 2000);
     }
   };

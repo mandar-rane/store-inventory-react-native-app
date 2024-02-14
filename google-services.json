@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1079028139847",
+    "project_id": "dezowner",
+    "storage_bucket": "dezowner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079028139847:android:2d3b5a7147c732028dae62",
+        "android_client_info": {
+          "package_name": "com.misccdr.dezdash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs7yp34HWepyVZoi-xI68PZBoTooLEDt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

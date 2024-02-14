@@ -18,7 +18,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Product from "../components/Product";
 import LottieView from "lottie-react-native";
-
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
 const productScreen = () => {
   const router = useRouter();
   const screenHeight = Dimensions.get("window").height;
@@ -52,7 +52,7 @@ const productScreen = () => {
 
       if (bearerToken) {
         const productsApiEndpoint =
-          "https://dzo.onrender.com/api/vi/shop/owner/shop/products/all";
+          `${DEZ_OWNER_BASE_URL}/shop/products/all`;
 
         const response = await axios.get(productsApiEndpoint, {
           headers: {
@@ -253,23 +253,24 @@ const productScreen = () => {
             justifyContent: "center",
             width: screenWidth,
             height: screenHeight - 150,
+           
           }}
         >
           <LottieView
-            source={require("../assets/anims/search_anim.json")}
+            source={require("../assets/anims/orders_search_anim.json")}
             style={{
-              marginStart:5,
-              height:200,
-              width:200
-
+             
+              height:250,
+              width:250,
               
+        
             }}
             autoPlay={true}
             loop={true}
             speed={1}
           />
 
-          <Text>Fetching Products...</Text>
+          <Text style={{fontStyle:"italic", fontSize:20}}>Fetching Products...</Text>
         </View>)}
       
       <TouchableOpacity

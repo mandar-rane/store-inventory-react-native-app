@@ -13,6 +13,7 @@ import {
 import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
 
 async function saveToken(key, value) {
   await SecureStore.setItemAsync(key, value);
@@ -38,14 +39,21 @@ const otpScreen = () => {
   const handleOtpSubmit = async () => {
     if (isOtpValid) {
       try {
-        const otpApiUrl =
-          "https://dzo.onrender.com/api/vi/shop/owner/login/verify/otp";
+        const otpApiUrl = `${DEZ_OWNER_BASE_URL}/login/verify/otp`;
         const postData = { phone: phoneNum, otp: receivedOtp };
         const otpResponse = await axios.post(otpApiUrl, postData);
 
         if (otpResponse.data.success) {
           saveToken("accessTkn", otpResponse.data.token);
-          router.replace({ pathname: "/ordersScreen" });
+          if (
+            otpResponse.data.user.shop !== undefined &&
+            otpResponse.data.user.shop !== null &&
+            otpResponse.data.user.shop !== ""
+          ) {
+            router.replace({ pathname: "/ordersScreen" });
+          } else {
+            router.replace({ pathname: "/createShopScreen" });
+          }
         }
       } catch (error) {
         console.log("API Error: ", error);
@@ -61,8 +69,7 @@ const otpScreen = () => {
 
   const handleResendOtp = async () => {
     try {
-      const otpApiUrl =
-        "https://dzo.onrender.com/api/vi/shop/owner/login/send/otp";
+      const otpApiUrl = `${DEZ_OWNER_BASE_URL}/login/send/otp`;
       const postData = { phone: phoneNum };
       const otpResponse = await axios.post(otpApiUrl, postData);
       setButtonDisabled(true);
@@ -82,8 +89,7 @@ const otpScreen = () => {
   useEffect(() => {
     const makeApiCall = async () => {
       try {
-        const otpApiUrl =
-          "https://dzo.onrender.com/api/vi/shop/owner/login/send/otp";
+        const otpApiUrl = `${DEZ_OWNER_BASE_URL}/login/send/otp`;
         const postData = { phone: phoneNum };
         const otpResponse = await axios.post(otpApiUrl, postData);
 

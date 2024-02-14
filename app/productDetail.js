@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Stack, useRouter, Link, useGlobalSearchParams } from "expo-router";
+import { useRouter, useGlobalSearchParams } from "expo-router";
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import ImgUpload from "../components/ImgUpload";
 import RemoveImg from "../components/RemoveImg";
 import CustomModal from "../components/CustomModal";
 import * as SecureStore from "expo-secure-store";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
 
 const productDetail = () => {
   const router = useRouter();
@@ -69,7 +70,7 @@ const productDetail = () => {
       const bearerToken = await SecureStore.getItemAsync(key);
 
       if (bearerToken) {
-        const productDetailsApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/product/${productId}`;
+        const productDetailsApiEndpoint = `${DEZ_OWNER_BASE_URL}/shop/product/${productId}`;
 
         const response = await axios.get(productDetailsApiEndpoint, {
           headers: {
@@ -120,7 +121,7 @@ const productDetail = () => {
       const bearerToken = await SecureStore.getItemAsync(key);
 
       if (bearerToken) {
-        const deleteProductApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/delete/product/${editedProduct._id}`;
+        const deleteProductApiEndpoint = `${DEZ_OWNER_BASE_URL}/shop/delete/product/${editedProduct._id}`;
 
         const response = await axios.delete(deleteProductApiEndpoint, {
           headers: {
@@ -175,7 +176,7 @@ const productDetail = () => {
           isNaN(editedProduct.stock) ? 0 : editedProduct.stock
         );
 
-        const updateProductApiEndpoint = `https://dzo.onrender.com/api/vi/shop/owner/shop/update/product/${productId}`;
+        const updateProductApiEndpoint = `${DEZ_OWNER_BASE_URL}/shop/update/product/${productId}`;
 
         const response = await axios.put(
           updateProductApiEndpoint,

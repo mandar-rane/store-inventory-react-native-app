@@ -19,6 +19,7 @@ const screenWidth = Dimensions.get("window").width;
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import CustomModal from "../components/CustomModal";
 import * as SecureStore from "expo-secure-store";
+import DEZ_OWNER_BASE_URL from "../utils/apiConfig";
 
 const updateLocationScreen = () => {
   const [initialRegion, setInitialRegion] = useState({
@@ -114,7 +115,7 @@ const updateLocationScreen = () => {
 
       if (bearerToken) {
         const apiUrl =
-          "https://dzo.onrender.com/api/vi/shop/owner/update/shop/details";
+          `${DEZ_OWNER_BASE_URL}/update/shop/details`;
 
         const requestBody = {
           latitude: locationData.latitude,
