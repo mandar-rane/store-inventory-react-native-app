@@ -69,9 +69,8 @@ async function registerForPushNotificationsAsync() {
         return;
       }
 
-      console.log("Token permission Granted");
       token = (await Notifications.getExpoPushTokenAsync({  projectId: Constants.expoConfig.extra.eas.projectId })).data;
-      console.log(token);
+      
       ToastAndroid.show(token.toString(), ToastAndroid.SHORT);
     } else {
       alert('Must use a physical device for Push Notifications');

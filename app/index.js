@@ -49,9 +49,9 @@ const Home = () => {
       });
     } else {
       if (Platform.OS == "android") {
-        ToastAndroid.show("Enter Correct Number", ToastAndroid.SHORT);
+        ToastAndroid.show("Enter Valid Number", ToastAndroid.SHORT);
       } else {
-        Alert.alert("Error", "Enter Correct Number");
+        Alert.alert("Error", "Enter Valid Number");
       }
     }
   };
