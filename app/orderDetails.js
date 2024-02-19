@@ -38,7 +38,7 @@ const orderDetails = () => {
         console.log(response.data.order);
         setOrderDetails(response.data.order);
       } else {
-        console.error("Token not found in SecureStore");
+        console.error("Access Token not found");
       }
     } catch (error) {
       console.error("Error fetching order details:", error);
