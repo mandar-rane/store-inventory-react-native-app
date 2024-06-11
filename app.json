@@ -14,7 +14,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "be4cb173-492d-4fac-846c-6f953ed9fb81"
+        "projectId": ""
       }
     },
     "owner": "misccdr",
@@ -24,7 +24,7 @@
       "googleServicesFile": "./google-services.json",
       "config":{
         "googleMaps":{
-          "apiKey":"AIzaSyArRpkPQqwY0EDi0cO4m6JAWOTzk9PY6Xk"
+          "apiKey":""
         }
       }
     }
