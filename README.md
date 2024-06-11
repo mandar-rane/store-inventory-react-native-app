@@ -1,6 +1,5 @@
-#Store Inventory Management App
+Store Inventory Management App
 
-Main Page with recent orders:
 ![IMG_20240612_032137](https://github.com/mandar-rane/store-inventory-react-native-app/assets/98955924/863a6f69-a7a7-4f02-bf60-394cb13bca9b)
 <br>
 <br>
