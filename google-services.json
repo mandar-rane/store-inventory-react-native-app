@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1079028139847:android:2d3b5a7147c732028dae62",
+        "mobilesdk_app_id": "",
         "android_client_info": {
           "package_name": "com.misccdr.dezdash"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDs7yp34HWepyVZoi-xI68PZBoTooLEDt0"
+          "current_key": ""
         }
       ],
       "services": {
