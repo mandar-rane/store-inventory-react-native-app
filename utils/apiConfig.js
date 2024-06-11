@@ -1,3 +1,3 @@
-const DEZ_OWNER_BASE_URL = 'https://dezerto.onrender.com/api/v1/shop/owner'
+const DEZ_OWNER_BASE_URL = ''
 
 export default DEZ_OWNER_BASE_URL;
